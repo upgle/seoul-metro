@@ -1,0 +1,20 @@
+{
+    "name": "seoul-metro",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "seonghyun, oh",
+            "email": "admin@upgle.com"
+        }
+    ],
+    "require": {
+        "faisalman/simple-excel-php": "^0.3.15",
+        "phpoffice/phpexcel": "^1.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Upgle\\": "src/"
+        }
+    }
+
+}
