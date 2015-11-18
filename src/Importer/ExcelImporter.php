@@ -3,7 +3,7 @@ namespace Upgle\Importer;
 
 use Upgle\Repositories\VertexRepository;
 use Upgle\Repositories\WeightRepositoryInterface;
-use Upgle\Vertex;
+use Upgle\Model\Vertex;
 
 class ExcelImporter
 {

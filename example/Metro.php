@@ -33,7 +33,7 @@ class Graph {
         $dist = [];
         $prev = [];
         foreach($vertexs as $vertex) {
-            /* @var $vertex Upgle\Vertex */
+            /* @var $vertex Upgle\Model\Vertex */
             $dist[$vertex->getName()] = 9999;
         }
         $dist[$source] = 0;

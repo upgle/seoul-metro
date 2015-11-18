@@ -1,6 +1,6 @@
 <?php
 
-namespace Upgle;
+namespace Upgle\Model;
 
 class Vertex
 {
