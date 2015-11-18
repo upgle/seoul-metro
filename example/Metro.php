@@ -47,7 +47,7 @@ class Graph {
             $u = $Q[array_flip($Q_DIST)[min($Q_DIST)]];
             unset($Q[array_flip($Q_DIST)[min($Q_DIST)]]);
 
-            foreach($u->getConnectedVertexs() as $v){
+            foreach($u->getConnectedVertexes() as $v){
                 $alt = $dist[$u->getName()] + $minutesWeight->getWeight($u, $v);
                 if($alt < $dist[$v->getName()]) {
                     $dist[$v->getName()] = $alt;
