@@ -60,4 +60,4 @@ class Graph {
 }
 
 $graph = new Graph();
-$graph->run("시청", $vertexs->getVertexes(), $minutesWeight);
+$graph->run("시청", $vertexs->gets(), $minutesWeight);
