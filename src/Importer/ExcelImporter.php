@@ -84,8 +84,8 @@ class ExcelImporter
                 $vertex2 = new Vertex($vertexName2);
             }
 
-            $vertex1->connectVertex($vertex2);
-            $vertex2->connectVertex($vertex1);
+            $vertex1->connect($vertex2);
+            $vertex2->connect($vertex1);
 
             $this->vertexs->setVertex($vertex1->getName(), $vertex1);
             $this->vertexs->setVertex($vertex2->getName(), $vertex2);

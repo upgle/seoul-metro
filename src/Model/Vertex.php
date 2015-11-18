@@ -12,7 +12,7 @@ class Vertex
     /**
      * @var array
      */
-    private $linkedVertexs;
+    private $connectedVertexes;
 
     /**
      * Vertex Constructor
@@ -20,25 +20,25 @@ class Vertex
     public function __construct($name = NULL)
     {
         $this->name = $name;
-        $this->linkedVertexs = [];
+        $this->connectedVertexes = [];
     }
 
     /**
      * @param Vertex $vertex
      */
-    public function connectVertex(Vertex $vertex)
+    public function connect(Vertex $vertex)
     {
-        if(!in_array($vertex, $this->linkedVertexs)) {
-            array_push($this->linkedVertexs, $vertex);
+        if(!in_array($vertex, $this->connectedVertexes)) {
+            array_push($this->connectedVertexes, $vertex);
         }
     }
 
     /**
      * @return mixed
      */
-    public function getConnectedVertexs()
+    public function getConnectedVertexes()
     {
-        return $this->linkedVertexs;
+        return $this->connectedVertexes;
     }
 
     /**
