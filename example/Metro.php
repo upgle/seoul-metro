@@ -16,7 +16,7 @@ $graph = new Graph();
 $excelImporter = new ExcelImporter(dirname(__FILE__). '/metro.xlsx', $graph);
 $excelImporter->import();
 
-$graph = new Dijkstra($graph);
-$path = $graph->getShortestPath("시청", "동대문");
+$algorithm = new Dijkstra($graph);
+$path = $algorithm->getShortestPath("시청", "동대문");
 
 var_dump($path);
