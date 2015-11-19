@@ -2,7 +2,6 @@
 namespace Upgle\Algorithm;
 
 use Upgle\Model\Graph;
-use Upgle\Repositories\EdgeRepositories;
 use Upgle\Model\Vertex;
 
 class Dijkstra implements  ShortestPathInterface {
@@ -73,6 +72,6 @@ class Dijkstra implements  ShortestPathInterface {
             $goal = $start;
             $path[] = $start;
         }
-        return array_flip($path);
+        return array_reverse($path);
     }
 }
