@@ -46,7 +46,6 @@ class ExcelImporter
     {
         $objPHPExcel = \PHPExcel_IOFactory::load($this->file);
         $rowIterator = $objPHPExcel->getActiveSheet()->getRowIterator(2);
-        $vertexs = [];
 
         foreach($rowIterator as $row) {
 
