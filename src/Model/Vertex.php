@@ -7,20 +7,21 @@ class Vertex
     /**
      * @var string
      */
-    private $name;
+    private $id;
 
     /**
      * @var array
      */
-    private $connectedVertexes;
+    private $connectedVertices;
 
     /**
      * Vertex Constructor
+     * @param null $id
      */
-    public function __construct($name = NULL)
+    public function __construct($id = NULL)
     {
-        $this->name = $name;
-        $this->connectedVertexes = [];
+        $this->id = $id;
+        $this->connectedVertices = [];
     }
 
     /**
@@ -28,33 +29,33 @@ class Vertex
      */
     public function connect(Vertex $vertex)
     {
-        if(!in_array($vertex, $this->connectedVertexes)) {
-            array_push($this->connectedVertexes, $vertex);
+        if(!in_array($vertex, $this->connectedVertices)) {
+            array_push($this->connectedVertices, $vertex);
         }
     }
 
     /**
      * @return mixed
      */
-    public function getConnectedVertexes()
+    public function getConnectedVertices()
     {
-        return $this->connectedVertexes;
+        return $this->connectedVertices;
     }
 
     /**
      * @return null
      */
-    public function getName()
+    public function getId()
     {
-        return $this->name;
+        return $this->id;
     }
 
     /**
      * @param null $name
      */
-    public function setName($name)
+    public function setId($name)
     {
-        $this->name = $name;
+        $this->id = $name;
     }
 
     /**
@@ -62,6 +63,6 @@ class Vertex
      */
     public function __toString()
     {
-        return $this->name;
+        return $this->id;
     }
 }

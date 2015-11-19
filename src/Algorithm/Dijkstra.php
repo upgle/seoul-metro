@@ -36,29 +36,29 @@ class Dijkstra implements  ShortestPathInterface {
 
         foreach($Q as $vertex) {
             /* @var $vertex Vertex */
-            $dist[$vertex->getName()] = 99999;
+            $dist[$vertex->getId()] = 99999;
         }
         $dist[$source] = 0;
 
         while(count($Q) > 0) {
             $Q_DIST = array_map(function($value) use ($dist){
                 /** @var Vertex $value */
-                return $dist[$value->getName()];
+                return $dist[$value->getId()];
             }, $Q);
 
             $u = $Q[array_flip($Q_DIST)[min($Q_DIST)]];
             unset($Q[array_flip($Q_DIST)[min($Q_DIST)]]);
 
             /** @var Vertex $u */
-            foreach($u->getConnectedVertexes() as $v){
+            foreach($u->getConnectedVertices() as $v){
 
                 /** @var Vertex $v */
-                $edge = $this->graph->getEdgeById($u->getName(), $v->getName());
+                $edge = $this->graph->getEdgeById($u->getId(), $v->getId());
 
-                $alt = $dist[$u->getName()] + (int)$edge->getWeight();
-                if($alt < $dist[$v->getName()]) {
-                    $dist[$v->getName()] = $alt;
-                    $prev[$v->getName()] = $u; //바로 직전 Vertex 기록 (for path planning)
+                $alt = $dist[$u->getId()] + (int)$edge->getWeight();
+                if($alt < $dist[$v->getId()]) {
+                    $dist[$v->getId()] = $alt;
+                    $prev[$v->getId()] = $u; //바로 직전 Vertex 기록 (for path planning)
                 }
             }
         }
@@ -68,7 +68,7 @@ class Dijkstra implements  ShortestPathInterface {
             $goal
         ];
         while($start != $source) {
-            $start = $prev[$goal]->getName();
+            $start = $prev[$goal]->getId();
             $goal = $start;
             $path[] = $start;
         }

@@ -17,7 +17,7 @@ class Graph
      * @param Edge $edge
      */
     public function setEdge(Edge $edge) {
-        $this->edges[$edge->getVertexA()->getName()][$edge->getVertexB()->getName()] = $edge;
+        $this->edges[$edge->getVertexA()->getId()][$edge->getVertexB()->getId()] = $edge;
     }
 
     /**
@@ -26,7 +26,7 @@ class Graph
      * @return Edge
      */
     public function getEdge(Vertex $vertexA, Vertex $vertexB) {
-        return $this->edges[$vertexA->getName()][$vertexB->getName()];
+        return $this->edges[$vertexA->getId()][$vertexB->getId()];
     }
 
     /**
@@ -58,7 +58,7 @@ class Graph
      * @param Vertex $vertex
      */
     public function setVertex(Vertex $vertex) {
-        $this->vertices[$vertex->getName()] = $vertex;
+        $this->vertices[$vertex->getId()] = $vertex;
     }
 
     /**
