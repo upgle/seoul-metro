@@ -1,29 +1,24 @@
 <?php
 namespace Upgle\Algorithm;
 
+use Upgle\Model\Graph;
 use Upgle\Repositories\EdgeRepositories;
 use Upgle\Model\Vertex;
 
 class Dijkstra implements  ShortestPathInterface {
 
     /**
-     * @var EdgeRepositories
+     * @var Graph
      */
-    private $edges;
+    private $graph;
 
     /**
-     * @var array
+     * Dijkstra Constructor
+     * @param Graph $graph
      */
-    private $vertices;
-
-    /**
-     * @param array $vertices
-     * @param EdgeRepositories $edges
-     */
-    public function __construct(array $vertices, EdgeRepositories $edges)
+    public function __construct(Graph $graph)
     {
-        $this->vertices = $vertices;
-        $this->edges = $edges;
+        $this->graph = $graph;
     }
 
     /**
@@ -34,7 +29,7 @@ class Dijkstra implements  ShortestPathInterface {
      */
     public function getShortestPath($source, $goal) {
 
-        $Q = $this->vertices;
+        $Q = $this->graph->getVertices();
         $dist = [];
 
         /* @var $prev Vertex[] */
@@ -58,9 +53,9 @@ class Dijkstra implements  ShortestPathInterface {
             /** @var Vertex $u */
             foreach($u->getConnectedVertexes() as $v){
 
-                $edge = $this->edges->get($this->vertices[$u->getName()], $this->vertices[$v->getName()]);
-
                 /** @var Vertex $v */
+                $edge = $this->graph->getEdgeById($u->getName(), $v->getName());
+
                 $alt = $dist[$u->getName()] + (int)$edge->getWeight();
                 if($alt < $dist[$v->getName()]) {
                     $dist[$v->getName()] = $alt;

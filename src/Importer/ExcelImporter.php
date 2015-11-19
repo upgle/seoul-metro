@@ -2,37 +2,30 @@
 namespace Upgle\Importer;
 
 use Upgle\Model\Edge;
-use Upgle\Repositories\EdgeRepositories;
-use Upgle\Repositories\VertexRepository;
+use Upgle\Model\Graph;
 use Upgle\Model\Vertex;
 
 class ExcelImporter
 {
-    /**
-     * @var VertexRepository
-     */
-    protected $vertexs;
-
     /**
      * @var string
      */
     protected $file;
 
     /**
-     * @var EdgeRepositories
+     * @var Graph
      */
-    protected $edges;
+    protected $graph;
+
 
     /**
      * @param $filePath
-     * @param VertexRepository $vertexs
-     * @param EdgeRepositories $edges
+     * @param Graph $graph
      */
-    public function __construct($filePath,  VertexRepository $vertexs, EdgeRepositories $edges)
+    public function __construct($filePath, Graph $graph)
     {
         $this->file = $filePath;
-        $this->vertexs = $vertexs;
-        $this->edges = $edges;
+        $this->graph = $graph;
     }
 
     public function import()
@@ -65,23 +58,22 @@ class ExcelImporter
                         break;
                 }
             }
-            $vertex1 = $this->vertexs->get($vertexName1);
+
+            $vertex1 = $this->graph->getVertexById($vertexName1);
             if($vertex1 == NULL){
                 $vertex1 = new Vertex($vertexName1);
             }
-
-            $vertex2 = $this->vertexs->get($vertexName2);
+            $vertex2 = $this->graph->getVertexById($vertexName2);
             if($vertex2 == NULL){
                 $vertex2 = new Vertex($vertexName2);
             }
             $vertex1->connect($vertex2);
             $vertex2->connect($vertex1);
 
-            $this->edges->set(new Edge($vertex1, $vertex2, $minutes));
-            $this->edges->set(new Edge($vertex2, $vertex1, $minutes));
-
-            $this->vertexs->set($vertex1->getName(), $vertex1);
-            $this->vertexs->set($vertex2->getName(), $vertex2);
+            $this->graph->setEdge(new Edge($vertex1, $vertex2, $minutes));
+            $this->graph->setEdge(new Edge($vertex2, $vertex1, $minutes));
+            $this->graph->setVertex($vertex1);
+            $this->graph->setVertex($vertex2);
         }
     }
 }
