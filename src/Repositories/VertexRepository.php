@@ -1,7 +1,7 @@
 <?php
 namespace Upgle\Repositories;
 
-use Upgle\Vertex;
+use Upgle\Model\Vertex;
 
 class VertexRepository
 {
@@ -27,7 +27,7 @@ class VertexRepository
      * @param $name
      * @return null
      */
-    public function getVertex($name)
+    public function get($name)
     {
         return (isset($this->vertexes[$name])) ? $this->vertexes[$name] : NULL;
     }
@@ -36,14 +36,14 @@ class VertexRepository
      * @param $name
      * @param Vertex $vertex
      */
-    public function setVertex($name, Vertex $vertex) {
+    public function set($name, Vertex $vertex) {
         $this->vertexes[$name] = $vertex;
     }
 
     /**
      * @return array
      */
-    public function getVertexes()
+    public function gets()
     {
         return $this->vertexes;
     }
@@ -51,7 +51,7 @@ class VertexRepository
     /**
      * @param array $vertexes
      */
-    public function setVertexes($vertexes)
+    public function sets($vertexes)
     {
         $this->vertexes = $vertexes;
     }

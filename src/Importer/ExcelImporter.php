@@ -3,7 +3,7 @@ namespace Upgle\Importer;
 
 use Upgle\Repositories\VertexRepository;
 use Upgle\Repositories\WeightRepositoryInterface;
-use Upgle\Vertex;
+use Upgle\Model\Vertex;
 
 class ExcelImporter
 {
@@ -73,21 +73,21 @@ class ExcelImporter
                         break;
                 }
             }
-            $vertex1 = $this->vertexs->getVertex($vertexName1);
+            $vertex1 = $this->vertexs->get($vertexName1);
             if($vertex1 == NULL){
                 $vertex1 = new Vertex($vertexName1);
             }
 
-            $vertex2 = $this->vertexs->getVertex($vertexName2);
+            $vertex2 = $this->vertexs->get($vertexName2);
             if($vertex2 == NULL){
                 $vertex2 = new Vertex($vertexName2);
             }
 
-            $vertex1->connectVertex($vertex2);
-            $vertex2->connectVertex($vertex1);
+            $vertex1->connect($vertex2);
+            $vertex2->connect($vertex1);
 
-            $this->vertexs->setVertex($vertex1->getName(), $vertex1);
-            $this->vertexs->setVertex($vertex2->getName(), $vertex2);
+            $this->vertexs->set($vertex1->getName(), $vertex1);
+            $this->vertexs->set($vertex2->getName(), $vertex2);
 
             $this->minutes->setWeight($vertex1, $vertex2, $minutes);
             $this->minutes->setWeight($vertex2, $vertex1, $minutes);

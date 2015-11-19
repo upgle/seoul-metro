@@ -1,7 +1,7 @@
 <?php
 namespace Upgle\Repositories;
 
-use Upgle\Vertex;
+use Upgle\Model\Vertex;
 
 class WeightRepository implements WeightRepositoryInterface
 {
