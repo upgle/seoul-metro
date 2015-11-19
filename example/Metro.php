@@ -13,7 +13,7 @@ $graph = new Graph();
 /**
  * Data Import
  */
-$excelImporter = new ExcelImporter(dirname(__FILE__). '/metro.xlsx', $graph, $vertexs, $edges);
+$excelImporter = new ExcelImporter(dirname(__FILE__). '/metro.xlsx', $graph);
 $excelImporter->import();
 
 $graph = new Dijkstra($graph);
