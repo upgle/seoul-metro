@@ -1,13 +1,13 @@
 <?php
 namespace Upgle\Algorithm;
 
-use Upgle\Repositories\WeightRepositoryInterface;
-use Upgle\Vertex;
+use Upgle\Repositories\EdgeRepositories;
+use Upgle\Model\Vertex;
 
 class Dijkstra implements  ShortestPathInterface {
 
     /**
-     * @var WeightRepositoryInterface
+     * @var EdgeRepositories
      */
     private $edges;
 
@@ -18,18 +18,28 @@ class Dijkstra implements  ShortestPathInterface {
 
     /**
      * @param array $vertices
-     * @param WeightRepositoryInterface $edges
+     * @param EdgeRepositories $edges
      */
-    public function __construct(array $vertices, WeightRepositoryInterface $edges)
+    public function __construct(array $vertices, EdgeRepositories $edges)
     {
         $this->vertices = $vertices;
         $this->edges = $edges;
     }
 
+    /**
+     * Get Shortest Path.
+     * @param $source
+     * @param $goal
+     * @return array
+     */
     public function getShortestPath($source, $goal) {
+
         $Q = $this->vertices;
         $dist = [];
+
+        /* @var $prev Vertex[] */
         $prev = [];
+
         foreach($Q as $vertex) {
             /* @var $vertex Vertex */
             $dist[$vertex->getName()] = 99999;
@@ -46,15 +56,19 @@ class Dijkstra implements  ShortestPathInterface {
             unset($Q[array_flip($Q_DIST)[min($Q_DIST)]]);
 
             /** @var Vertex $u */
-            foreach($u->getConnectedVertexs() as $v){
+            foreach($u->getConnectedVertexes() as $v){
+
+                $edge = $this->edges->get($this->vertices[$u->getName()], $this->vertices[$v->getName()]);
+
                 /** @var Vertex $v */
-                $alt = $dist[$u->getName()] + $this->edges->getWeight($u, $v);
+                $alt = $dist[$u->getName()] + (int)$edge->getWeight();
                 if($alt < $dist[$v->getName()]) {
                     $dist[$v->getName()] = $alt;
                     $prev[$v->getName()] = $u; //바로 직전 Vertex 기록 (for path planning)
                 }
             }
         }
+
         $start = NULL;
         $path = [
             $goal
@@ -64,6 +78,6 @@ class Dijkstra implements  ShortestPathInterface {
             $goal = $start;
             $path[] = $start;
         }
-        var_dump($path);
+        return array_flip($path);
     }
 }

@@ -1,22 +1,13 @@
 <?php
 namespace Upgle\Importer;
 
+use Upgle\Model\Edge;
+use Upgle\Repositories\EdgeRepositories;
 use Upgle\Repositories\VertexRepository;
-use Upgle\Repositories\WeightRepositoryInterface;
 use Upgle\Model\Vertex;
 
 class ExcelImporter
 {
-    /**
-     * @var WeightRepositoryInterface
-     */
-    protected $minutes;
-
-    /**
-     * @var WeightRepositoryInterface
-     */
-    protected $km;
-
     /**
      * @var VertexRepository
      */
@@ -28,18 +19,20 @@ class ExcelImporter
     protected $file;
 
     /**
-     * ExcelImporter constructor
+     * @var EdgeRepositories
+     */
+    protected $edges;
+
+    /**
      * @param $filePath
      * @param VertexRepository $vertexs
-     * @param WeightRepositoryInterface $minutes
-     * @param WeightRepositoryInterface $km
+     * @param EdgeRepositories $edges
      */
-    public function __construct($filePath,  VertexRepository $vertexs, WeightRepositoryInterface $minutes, WeightRepositoryInterface $km)
+    public function __construct($filePath,  VertexRepository $vertexs, EdgeRepositories $edges)
     {
         $this->file = $filePath;
-        $this->minutes = $minutes;
-        $this->km = $km;
         $this->vertexs = $vertexs;
+        $this->edges = $edges;
     }
 
     public function import()
@@ -52,7 +45,6 @@ class ExcelImporter
             $vertexName1 = NULL;
             $vertexName2 = NULL;
             $minutes = 0;
-            $km = 0;
             foreach($row->getCellIterator() as $cell) {
                 /* @var $cell \PHPExcel_Cell */
                 $column = $cell->getColumn();
@@ -82,18 +74,14 @@ class ExcelImporter
             if($vertex2 == NULL){
                 $vertex2 = new Vertex($vertexName2);
             }
-
             $vertex1->connect($vertex2);
             $vertex2->connect($vertex1);
 
+            $this->edges->set(new Edge($vertex1, $vertex2, $minutes));
+            $this->edges->set(new Edge($vertex2, $vertex1, $minutes));
+
             $this->vertexs->set($vertex1->getName(), $vertex1);
             $this->vertexs->set($vertex2->getName(), $vertex2);
-
-            $this->minutes->setWeight($vertex1, $vertex2, $minutes);
-            $this->minutes->setWeight($vertex2, $vertex1, $minutes);
-
-            $this->km->setWeight($vertex1, $vertex2, $km);
-            $this->km->setWeight($vertex2, $vertex1, $km);
         }
     }
 }
