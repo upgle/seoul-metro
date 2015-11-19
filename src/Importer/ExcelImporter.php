@@ -3,20 +3,19 @@ namespace Upgle\Importer;
 
 use Upgle\Model\Edge;
 use Upgle\Model\Graph;
-use Upgle\Model\Vertex;
+use Upgle\Model\Station;
 
 class ExcelImporter
 {
-    /**
-     * @var string
-     */
-    protected $file;
-
     /**
      * @var Graph
      */
     protected $graph;
 
+    /**
+     * @var \PHPExcel
+     */
+    protected $objPHPExcel;
 
     /**
      * @param $filePath
@@ -24,29 +23,64 @@ class ExcelImporter
      */
     public function __construct($filePath, Graph $graph)
     {
-        $this->file = $filePath;
         $this->graph = $graph;
+        $this->objPHPExcel = \PHPExcel_IOFactory::load($filePath);
+    }
+
+    /**
+     * @return array
+     * @throws \PHPExcel_Exception
+     */
+    protected function getStations() {
+        $stations = [];
+        $rowIterator = $this->objPHPExcel->getSheet(2)->getRowIterator(2);
+        foreach($rowIterator as $row) {
+
+            $line = $name = $code = NULL;
+            foreach ($row->getCellIterator() as $cell) {
+                /* @var $cell \PHPExcel_Cell */
+                $column = $cell->getColumn();
+                switch ($column) {
+                    case 'B' : //코드
+                        $code = $cell->getValue();
+                        break;
+                    case 'C' : //이름
+                        $name = $cell->getValue();
+                        break;
+                    case 'D' : //라인
+                        $line = $cell->getValue();
+                        break;
+                }
+            }
+            if(is_numeric($code)) {
+                $stations[$code] = [
+                    "name" => $name,
+                    "line" => $line
+                ];
+            }
+        }
+        return $stations;
     }
 
     public function import()
     {
-        $objPHPExcel = \PHPExcel_IOFactory::load($this->file);
-        $rowIterator = $objPHPExcel->getActiveSheet()->getRowIterator(2);
+        $stations = $this->getStations();
+        $rowIterator = $this->objPHPExcel->getSheet(0)->getRowIterator();
 
         foreach($rowIterator as $row) {
 
-            $vertexName1 = NULL;
-            $vertexName2 = NULL;
+            $vertexId1 = NULL;
+            $vertexId2 = NULL;
             $minutes = 0;
             foreach($row->getCellIterator() as $cell) {
                 /* @var $cell \PHPExcel_Cell */
                 $column = $cell->getColumn();
                 switch($column) {
                     case 'B' :
-                        $vertexName1 = $cell->getValue();
+                        $vertexId1 = $cell->getValue();
                         break;
                     case 'C' :
-                        $vertexName2 = $cell->getValue();
+                        $vertexId2 = $cell->getValue();
                         break;
                     //거리(km)
                     case 'D' :
@@ -59,13 +93,17 @@ class ExcelImporter
                 }
             }
 
-            $vertex1 = $this->graph->getVertexById($vertexName1);
+            $vertex1 = $this->graph->getVertexById($vertexId1);
             if($vertex1 == NULL){
-                $vertex1 = new Vertex($vertexName1);
+                $vertex1 = new Station($vertexId1);
+                $vertex1->setName($stations[$vertexId1]["name"]);
+                $vertex1->setLine($stations[$vertexId1]["line"]);
             }
-            $vertex2 = $this->graph->getVertexById($vertexName2);
+            $vertex2 = $this->graph->getVertexById($vertexId2);
             if($vertex2 == NULL){
-                $vertex2 = new Vertex($vertexName2);
+                $vertex2 = new Station($vertexId2);
+                $vertex2->setName($stations[$vertexId2]["name"]);
+                $vertex2->setLine($stations[$vertexId2]["line"]);
             }
             $vertex1->connect($vertex2);
             $vertex2->connect($vertex1);

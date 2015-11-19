@@ -6,7 +6,7 @@ class Graph
     /**
      * @var Edge[]
      */
-    private $edges = [];
+    protected $edges = [];
 
     /**
      * @var Vertex[]

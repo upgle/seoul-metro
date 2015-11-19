@@ -4,7 +4,7 @@ namespace Upgle\Algorithm;
 use Upgle\Model\Graph;
 use Upgle\Model\Vertex;
 
-class Dijkstra implements  ShortestPathInterface {
+class Dijkstra implements ShortestPathInterface {
 
     /**
      * @var Graph
@@ -63,13 +63,14 @@ class Dijkstra implements  ShortestPathInterface {
             }
         }
 
-        $start = NULL;
+        $start = new Vertex();
         $path = [
-            $goal
+            $this->graph->getVertexById($goal)
         ];
-        while($start != $source) {
-            $start = $prev[$goal]->getId();
-            $goal = $start;
+
+        while($start->getId() != $source) {
+            $start = $prev[$goal];
+            $goal = $start->getId();
             $path[] = $start;
         }
         return array_reverse($path);
