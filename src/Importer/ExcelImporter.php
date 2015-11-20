@@ -37,6 +37,9 @@ class ExcelImporter
         foreach($rowIterator as $row) {
 
             $line = $name = $code = NULL;
+            $latitude = NULL;
+            $longitude = NULL;
+
             foreach ($row->getCellIterator() as $cell) {
                 /* @var $cell \PHPExcel_Cell */
                 $column = $cell->getColumn();
@@ -50,12 +53,20 @@ class ExcelImporter
                     case 'D' : //라인
                         $line = $cell->getValue();
                         break;
+                    case 'F' : //GPS X 위도
+                        $latitude = $cell->getValue();
+                        break;
+                    case 'G' : //GPS Y 경도
+                        $longitude = $cell->getValue();
+                        break;
                 }
             }
             if(is_numeric($code)) {
                 $stations[$code] = [
                     "name" => $name,
-                    "line" => $line
+                    "line" => $line,
+                    "latitude" => $latitude,
+                    "longitude" => $longitude
                 ];
             }
         }
@@ -100,12 +111,16 @@ class ExcelImporter
                 $vertex1 = new Station($vertexId1);
                 $vertex1->setName($stations[$vertexId1]["name"]);
                 $vertex1->setLine($stations[$vertexId1]["line"]);
+                $vertex1->setLatitude($stations[$vertexId1]["latitude"]);
+                $vertex1->setLongitude($stations[$vertexId1]["longitude"]);
             }
             $vertex2 = $this->graph->getVertexById($vertexId2);
             if($vertex2 == NULL){
                 $vertex2 = new Station($vertexId2);
                 $vertex2->setName($stations[$vertexId2]["name"]);
                 $vertex2->setLine($stations[$vertexId2]["line"]);
+                $vertex2->setLatitude($stations[$vertexId2]["latitude"]);
+                $vertex2->setLongitude($stations[$vertexId2]["longitude"]);
             }
             $vertex1->connect($vertex2);
             $vertex2->connect($vertex1);
