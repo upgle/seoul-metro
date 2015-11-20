@@ -101,12 +101,12 @@ foreach($seoulMetro->getVertices() as $station) {
             border-right: 1px solid #aaa;
             z-index: 90;
             font-size: 13px;
-            padding-top: 165px;
+            padding-top: 195px;
             box-sizing: border-box;
         }
         #subway-route {
             margin: 0;
-            padding: 10px 0 0;
+            padding: 13px 0 0;
             height: 100%;
             overflow: auto;
             box-sizing: border-box;
@@ -114,7 +114,7 @@ foreach($seoulMetro->getVertices() as $station) {
         #subway-route li {
             position: relative;
             list-style: none;
-            padding: 0 0 0 20px;
+            padding: 0 0 0 22px;
             margin: 0;
             height: 36px;
             line-height: 36px;
@@ -133,25 +133,38 @@ foreach($seoulMetro->getVertices() as $station) {
             text-align: center;
             font-weight: bold;
         }
+
+        #subway-route .line + .line:before {
+            position: absolute;
+            display: block;
+            background : #ccc;
+            top: -9px;
+            left:29px;
+            width: 4px;
+            height: 19px;
+            content : "";
+        }
+
+
         #subway-route .line1 .mark {
             border-color: #003291;
             color: #003291;
+        }
+        #subway-route .line1 + .line1:before {
+            background : #003291;
+        }
+
+        #subway-route .line2 .mark {
+            border-color: #37b42d;
+            color: #37b42d;
+        }
+        #subway-route .line2 + .line2:before {
+            background : #37b42d;
         }
 
         #subway-route .lineU .mark {
             border-color: #fd8d00;
             color: #fd8d00;
-        }
-
-        #subway-route .line1 + .line1:before {
-            position: absolute;
-            display: block;
-            top: -9px;
-            left:27px;
-            background : #003291;
-            width: 4px;
-            height: 19px;
-            content : "";
         }
 
         #form-search {
@@ -243,42 +256,56 @@ foreach($seoulMetro->getVertices() as $station) {
     </ul>
 </div>
 <div id="sidebar">
-
     <form action="/" id="form-search">
-    <input name="goal" class="goal" type="hidden" />
-    <input name="start" class="start" type="hidden" />
-
-    <input class="start_typeahead" type="text" placeholder="출발 역">
-    <input class="goal_typeahead" type="text" placeholder="도착 역">
-    <input class="btn-search" type="submit" value="빠른길 찾기" />
+        <input name="goal" class="goal" type="hidden" />
+        <input name="start" class="start" type="hidden" />
+        <input class="start_typeahead" type="text" placeholder="출발 역">
+        <input class="goal_typeahead" type="text" placeholder="도착 역">
+        <input class="btn-search" type="submit" value="빠른길 찾기" />
     </form>
-
     <ul id="subway-route">
         <?php foreach ($path as $station) : ?>
-        <li class="line<?=$station->getLine()?>"><span class="mark"></span><?=$station->getName()?></li>
+        <li class="line line<?=$station->getLine()?>"><span class="mark"></span><?=$station->getName()?></li>
         <?php endforeach; ?>
     </ul>
 </div>
 <div id="map"></div>
 <script>
     function initMap() {
+
+        var flightPlanCoordinates = [
+            <?php foreach ($path as $key => $station) : ?>
+            {lat: <?=$station->getLatitude()?>, lng:  <?=$station->getLongitude()?>},
+            <?php endforeach; ?>
+        ];
+
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 12,
             center: {lat: 37.493415, lng: 127.014080}
         });
-        var flightPlanCoordinates = [
-            {lat: 37.493415, lng: 127.014080},
-            {lat: 37.485013, lng: 127.016189}
-        ];
+
+        <?php foreach ($path as $station) : ?>
+            addMarker({lat: <?=$station->getLatitude()?>, lng: <?=$station->getLongitude()?>}, map);
+        <?php endforeach; ?>
+
         var flightPath = new google.maps.Polyline({
             path: flightPlanCoordinates,
             geodesic: true,
-            strokeColor: '#FF0000',
+            strokeColor: '#003291',
             strokeOpacity: 1.0,
             strokeWeight: 6
         });
-
         flightPath.setMap(map);
+    }
+
+    // Adds a marker to the map.
+    function addMarker(location, map) {
+        // Add the marker at the clicked location, and add the next-available label
+        // from the array of alphabetical characters.
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map,
+        });
     }
 
     var states = <?=json_encode($stations)?>;
