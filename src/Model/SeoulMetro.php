@@ -8,7 +8,7 @@ class SeoulMetro extends Graph
     /**
      * @param Station $vertex
      */
-    public function setVertex(Station $vertex) {
+    public function setVertex(Vertex $vertex) {
         $this->vertices[$vertex->getId()] = $vertex;
         $this->alias[$vertex->getLine()][$vertex->getName()] = $vertex->getId();
     }
