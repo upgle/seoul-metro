@@ -93,6 +93,8 @@ class ExcelImporter
                 }
             }
 
+            if(!is_numeric($vertexId1) || !is_numeric($vertexId2)) continue;
+
             $vertex1 = $this->graph->getVertexById($vertexId1);
             if($vertex1 == NULL){
                 $vertex1 = new Station($vertexId1);
