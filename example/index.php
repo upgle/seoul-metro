@@ -30,7 +30,7 @@ $bench = new \Ubench();
 $bench->start();
 $algorithm = new Dijkstra($seoulMetro);
 $path = [];
-if(is_numeric($_GET["start"]) && is_numeric($_GET["goal"])) {
+if(isset($_GET["start"]) && isset($_GET["goal"]) && is_numeric($_GET["start"]) && is_numeric($_GET["goal"])) {
     $path = $algorithm->getShortestPath(
         $_GET["start"],
         $_GET["goal"]
