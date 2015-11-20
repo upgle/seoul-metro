@@ -56,14 +56,16 @@ foreach($seoulMetro->getVertices() as $station) {
 <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-    <title>Simple Polylines</title>
+    <title>SEOUL Metro</title>
     <script src="js/jquery-1.11.3.min.js"></script>
     <script src="js/typeahead.bundle.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:600' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/xeicon/1.0.4/xeicon.min.css">
     <link rel="stylesheet" href="css/default.css">
 </head>
 <body>
 <div id="nav">
+    <h1><i class="xi-subway"></i> SEOUL Metro</h1>
     <ul class="statistics">
         <li>알고리즘 연산 시간 : <strong><?=$bench->getTime()?></strong></li>
         <li>메모리 피크 : <strong><?=$bench->getMemoryPeak()?></strong></li>
@@ -79,7 +81,7 @@ foreach($seoulMetro->getVertices() as $station) {
     </form>
     <ul id="subway-route">
         <?php foreach ($path as $station) : ?>
-        <li class="line line<?=$station->getLine()?>"><span class="mark"></span><?=$station->getName()?></li>
+        <li class="line line<?=$station->getLine()?>"><span class="mark"></span><?=$station->getName()?> (<?=$station->getLine()?>호선)</li>
         <?php endforeach; ?>
     </ul>
 </div>
@@ -95,7 +97,7 @@ foreach($seoulMetro->getVertices() as $station) {
 
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 12,
-            center: {lat: 37.493415, lng: 127.014080}
+            center: {lat: 37.55982, lng: 126.989143}
         });
 
         <?php foreach ($path as $station) : ?>
@@ -114,11 +116,9 @@ foreach($seoulMetro->getVertices() as $station) {
 
     // Adds a marker to the map.
     function addMarker(location, map) {
-        // Add the marker at the clicked location, and add the next-available label
-        // from the array of alphabetical characters.
         var marker = new google.maps.Marker({
             position: location,
-            map: map,
+            map: map
         });
     }
 

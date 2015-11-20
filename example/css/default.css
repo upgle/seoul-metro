@@ -9,9 +9,23 @@ html, body {
     left: 0;
     width: 100%;
     height: 48px;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #222;
     z-index: 100;
+    color: #222;
     background: #fff;
+}
+#nav h1 {
+    font-family: 'Open Sans', sans-serif;
+    float: left;
+    margin:0 0 0 14px;
+    padding:0;
+    height: 48px;
+    line-height: 48px;
+    font-size: 19px;
+}
+#nav h1 i.xi-subway {
+    line-height: inherit;
+    margin-right: 2px;
 }
 #nav .statistics {
     float: right;
@@ -53,9 +67,14 @@ html, body {
     position: relative;
     list-style: none;
     padding: 0 0 0 22px;
-    margin: 0;
-    height: 36px;
-    line-height: 36px;
+    margin: 19px 0 0;
+    height: 37px;
+    line-height: 37px;
+    font-size: 12px;
+    font-weight:bold;
+}
+#subway-route li:first-child {
+    margin-top: 0;
 }
 #subway-route .mark {
     position: relative;
@@ -64,7 +83,7 @@ html, body {
     width: 10px;
     height: 10px;
     border-radius: 100%;
-    margin-right: 8px;
+    margin-right: 11px;
     background: #fff;
     border: 4px solid #aaa;
     font-size: 12px;
@@ -75,21 +94,70 @@ html, body {
 #subway-route .line + .line:before {
     position: absolute;
     display: block;
-    background : #ccc;
-    top: -9px;
+    border-left: 4px dotted #ccc;
+    top: -25px;
     left:29px;
-    width: 4px;
-    height: 19px;
-    content : "";
+    height: 38px;
+    font-family: xeicon;
+    content : "\e75f";
+    padding-left: 6px;
+    line-height: 29px;
+    color:#777;
 }
 
+
+#subway-route .line1 + .line1,
+#subway-route .line2 + .line2,
+#subway-route .line3 + .line3,
+#subway-route .line4 + .line4,
+#subway-route .line5 + .line5,
+#subway-route .line6 + .line6,
+#subway-route .line7 + .line7,
+#subway-route .line8 + .line8,
+#subway-route .line9 + .line9,
+#subway-route .lineU + .lineU,
+#subway-route .lineSU + .lineSU,
+#subway-route .lineS + .lineS,
+#subway-route .lineK + .lineK,
+#subway-route .lineI + .lineI,
+#subway-route .lineG + .lineG,
+#subway-route .lineE + .lineE,
+#subway-route .lineB + .lineB,
+#subway-route .lineA + .lineA {
+    margin-top: 0;
+}
+
+#subway-route .line1 + .line1:before,
+#subway-route .line2 + .line2:before,
+#subway-route .line3 + .line3:before,
+#subway-route .line4 + .line4:before,
+#subway-route .line5 + .line5:before,
+#subway-route .line6 + .line6:before,
+#subway-route .line7 + .line7:before,
+#subway-route .line8 + .line8:before,
+#subway-route .line9 + .line9:before,
+#subway-route .lineU + .lineU:before,
+#subway-route .lineSU + .lineSU:before,
+#subway-route .lineS + .lineS:before,
+#subway-route .lineK + .lineK:before,
+#subway-route .lineI + .lineI:before,
+#subway-route .lineG + .lineG:before,
+#subway-route .lineE + .lineE:before,
+#subway-route .lineB + .lineB:before,
+#subway-route .lineA + .lineA:before {
+    border-left-style : solid;
+    top: -10px;
+    left:29px;
+    height: 20px;
+    content : "";
+}
 
 #subway-route .line1 .mark {
     border-color: #003291;
     color: #003291;
 }
 #subway-route .line1 + .line1:before {
-    background : #003291;
+    border-color : #003291;
 }
 
 #subway-route .line2 .mark {
@@ -97,12 +165,144 @@ html, body {
     color: #37b42d;
 }
 #subway-route .line2 + .line2:before {
-    background : #37b42d;
+    border-color : #37b42d;
 }
 
+#subway-route .line3 .mark {
+    border-color: #fa5f2c;
+    color: #fa5f2c;
+}
+#subway-route .line3 + .line3:before {
+    border-color : #fa5f2c;
+}
+
+#subway-route .line4 .mark {
+    border-color: #2c9ede;
+    color: #2c9ede;
+}
+#subway-route .line4 + .line4:before {
+    border-color : #2c9ede;
+}
+
+#subway-route .line5 .mark {
+    border-color: #8539b0;
+    color: #8539b0;
+}
+#subway-route .line5 + .line5:before {
+    border-color : #8539b0;
+}
+
+#subway-route .line6 .mark {
+    border-color: #9a4e0f;
+    color: #9a4e0f;
+}
+#subway-route .line6 + .line6:before {
+    border-color : #9a4e0f;
+}
+
+#subway-route .line7 .mark {
+    border-color: #606d00;
+    color: #606d00;
+}
+#subway-route .line7 + .line7:before {
+    border-color : #606d00;
+}
+
+#subway-route .line8 .mark {
+    border-color: #e71e6e;
+    color: #e71e6e;
+}
+#subway-route .line8 + .line8:before {
+    border-color : #e71e6e;
+}
+
+#subway-route .line9 .mark {
+    border-color: #bf9f1e;
+    color: #bf9f1e;
+}
+#subway-route .line9 + .line9:before {
+    border-color : #bf9f1e;
+}
+
+/* 의정부 경전철 */
 #subway-route .lineU .mark {
     border-color: #fd8d00;
     color: #fd8d00;
+}
+#subway-route .lineU + .lineU:before {
+    border-color : #fd8d00;
+}
+
+/* 수인선 */
+#subway-route .lineSU .mark {
+    border-color: #edb217;
+    color: #edb217;
+}
+#subway-route .lineSU + .lineSU:before {
+    border-color : #edb217;
+}
+
+/* 신분당선 */
+#subway-route .lineS .mark {
+    border-color: #a6032d;
+    color: #a6032d;
+}
+#subway-route .lineS + .lineS:before {
+    border-color : #a6032d;
+}
+
+/* 경의중앙선 */
+#subway-route .lineK .mark {
+    border-color: #7dc4a5;
+    color: #7dc4a5;
+}
+#subway-route .lineK + .lineK:before {
+    border-color : #7dc4a5;
+}
+
+/* 인천1호선 */
+#subway-route .lineI .mark {
+    border-color: #6691c8;
+    color: #6691c8;
+}
+#subway-route .lineI + .lineI:before {
+    border-color : #6691c8;
+}
+
+/* 경춘 */
+#subway-route .lineG .mark {
+    border-color: #26a97f;
+    color: #26a97f;
+}
+#subway-route .lineG + .lineG:before {
+    border-color : #26a97f;
+}
+
+/* 에버라인 */
+#subway-route .lineE .mark {
+    border-color: #77c371;
+    color: #77c371;
+}
+#subway-route .lineE + .lineE:before {
+    border-color : #77c371;
+}
+
+/* 분당선 */
+#subway-route .lineB .mark {
+    border-color: #edb217;
+    color: #edb217;
+}
+#subway-route .lineB + .lineB:before {
+    border-color : #edb217;
+}
+
+/* 공항철도 */
+#subway-route .lineA .mark {
+    border-color: #70b7e5;
+    color: #70b7e5;
+}
+#subway-route .lineA + .lineA:before {
+    border-color : #70b7e5;
 }
 
 #form-search {
