@@ -10,7 +10,8 @@
     "require": {
         "faisalman/simple-excel-php": "^0.3.15",
         "phpoffice/phpexcel": "^1.8",
-        "devster/ubench": "^1.2"
+        "devster/ubench": "^1.2",
+        "phpunit/phpunit": "^4.8"
     },
     "autoload": {
         "psr-4": {
