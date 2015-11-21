@@ -1,7 +1,6 @@
 <?php
 namespace Upgle\Algorithm;
 
-use Upgle\Model\Edge;
 use Upgle\Model\Graph;
 use Upgle\Model\Vertex;
 
