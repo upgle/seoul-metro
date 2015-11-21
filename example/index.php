@@ -50,12 +50,13 @@ $bench->end();
 $stations = [];
 foreach($seoulMetro->getVertices() as $station) {
     /* @var \Upgle\Model\Station $station */
-    $stations[$station->getId()] = [
+    $stations[] = [
         "id" => $station->getId(),
         "name" => $station->getName(),
         "line" => $station->getLine()
     ];
 }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -81,8 +82,8 @@ foreach($seoulMetro->getVertices() as $station) {
     <form action="/" id="form-search">
         <input name="goal" class="goal" type="hidden" value="<?=$goalId?>" />
         <input name="start" class="start" type="hidden" value="<?=$startId?>"/>
-        <input class="start_typeahead" type="text" placeholder="출발 역" value="<?=$stations[$startId]["name"]?>">
-        <input class="goal_typeahead" type="text" placeholder="도착 역" value="<?=$stations[$goalId]["name"]?>">
+        <input class="start_typeahead" type="text" placeholder="출발 역" value="<?=$seoulMetro->getStationNameById($startId)?>">
+        <input class="goal_typeahead" type="text" placeholder="도착 역" value="<?=$seoulMetro->getStationNameById($goalId)?>">
         <button type="submit" class="btn-search" value="빠른길 찾기"><i class="xi-magnifier"></i> 빠른길 찾기</button>
     </form>
     <ul id="subway-route">
