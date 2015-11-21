@@ -47,7 +47,7 @@ class Graph
 
     /**
      * @param $id
-     * @return null
+     * @return Vertex|null
      */
     public function getVertexById($id)
     {
