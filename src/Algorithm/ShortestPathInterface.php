@@ -3,5 +3,5 @@ namespace Upgle\Algorithm;
 
 interface ShortestPathInterface
 {
-    public function getShortestPath($start, $goal);
+    public function getShortestPath($startId, $goalId);
 }

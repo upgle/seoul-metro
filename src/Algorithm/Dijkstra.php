@@ -21,58 +21,100 @@ class Dijkstra implements ShortestPathInterface {
     }
 
     /**
-     * Get Shortest Path.
-     * @param $source
-     * @param $goal
+     * Q에 속한 Vertex중 가장 가까운 거리의 Vertex를 반환합니다
+     * Dist 배열 안에서 최소값(Min)을 찾습니다.
+     *
+     * @param array $dist
+     * @param Vertex[] $Q
+     * @return Vertex|null
+     */
+    private function getClosetVertex(array $dist, $Q) {
+        $v = NULL;
+        $minWeight = NULL;
+        foreach($Q as $vertex) {
+            if($v == NULL || $minWeight > $dist[$vertex->getId()]) {
+                $minWeight = $dist[$vertex->getId()];
+                $v = $vertex;
+            }
+        }
+        return $v;
+    }
+
+    /**
+     *
+     * ## 수도코드(Pseudocode)
+     *
+     * 1.  S ← empty sequence
+     * 2.  u ← target
+     * 3.  while prev[u] is defined:                  // Construct the shortest path with a stack S
+     * 4.      insert u at the beginning of S         // Push the vertex onto the stack
+     * 5.      u ← prev[u]                            // Traverse from target to source
+     * 6.  insert u at the beginning of S             // Push the source onto the stack
+     *
+     * @param $goalId
+     * @param $prev
      * @return array
      */
-    public function getShortestPath($source, $goal) {
+    private function makePath($goalId, $prev) {
+        $S = [];
+        $target = $this->graph->getVertexById($goalId);
 
+        while(isset($prev[$target->getId()])) {
+            array_push($S, $target);
+            $target = $prev[$target->getId()];
+        }
+        array_push($S, $target);
+
+        //STACK 자료구조를 사용하지 않아 반전 처리
+        return array_reverse($S);
+    }
+
+
+    /**
+     * Get Shortest Path.
+     * @param $startId
+     * @param $goalId
+     * @return array
+     */
+    public function getShortestPath($startId, $goalId) {
+
+        /**
+         * @var Vertex[] $Q
+         * @var Vertex[] $prev
+         * @var int[] $dist
+         */
         $Q = $this->graph->getVertices();
         $dist = [];
-
-        /* @var $prev Vertex[] */
         $prev = [];
 
+        /**
+         * 시작점을 제외한 Vertex들의 거리 값 무한대로 설정
+         */
         foreach($Q as $vertex) {
             /* @var $vertex Vertex */
-            $dist[$vertex->getId()] = 99999;
+            $dist[$vertex->getId()] = 999999;
         }
-        $dist[$source] = 0;
+        $dist[$startId] = 0;
 
+        /**
+         * 탐색 작업
+         * @var Vertex $u
+         * @var Vertex $v
+         */
         while(count($Q) > 0) {
-            $Q_DIST = array_map(function($value) use ($dist){
-                /** @var Vertex $value */
-                return $dist[$value->getId()];
-            }, $Q);
+            $u = $this->getClosetVertex($dist, $Q);
+            unset($Q[$u->getId()]);
 
-            $u = $Q[array_flip($Q_DIST)[min($Q_DIST)]];
-            unset($Q[array_flip($Q_DIST)[min($Q_DIST)]]);
-
-            /** @var Vertex $u */
             foreach($u->getConnectedVertices() as $v){
-
-                /** @var Vertex $v */
                 $edge = $this->graph->getEdgeById($u->getId(), $v->getId());
 
-                $alt = $dist[$u->getId()] + (int)$edge->getWeight();
+                $alt = $dist[$u->getId()] + $edge->getWeight();
                 if($alt < $dist[$v->getId()]) {
                     $dist[$v->getId()] = $alt;
                     $prev[$v->getId()] = $u; //바로 직전 Vertex 기록 (for path planning)
                 }
             }
         }
-
-        $start = new Vertex();
-        $path = [
-            $this->graph->getVertexById($goal)
-        ];
-
-        while($start->getId() != $source) {
-            $start = $prev[$goal];
-            $goal = $start->getId();
-            $path[] = $start;
-        }
-        return array_reverse($path);
+        return $this->makePath($goalId, $prev);
     }
 }
