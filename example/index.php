@@ -13,6 +13,12 @@ define('EXCEL_PATH', dirname(__FILE__). '/metro.xlsx');
 date_default_timezone_set('Europe/London');
 
 /**
+ * HTTP Request
+ */
+$startId = (isset($_GET["start"]) && is_numeric($_GET["start"])) ? $_GET["start"] : NULL;
+$goalId = (isset($_GET["goal"]) && is_numeric($_GET["goal"])) ? $_GET["goal"] : NULL;
+
+/**
  * Initilize SeoulMetro Graph
  */
 $seoulMetro = new SeoulMetro();
@@ -30,10 +36,10 @@ $bench = new \Ubench();
 $bench->start();
 $algorithm = new Dijkstra($seoulMetro);
 $path = [];
-if(isset($_GET["start"]) && isset($_GET["goal"]) && is_numeric($_GET["start"]) && is_numeric($_GET["goal"])) {
+if($startId && $goalId) {
     $path = $algorithm->getShortestPath(
-        $_GET["start"],
-        $_GET["goal"]
+        $startId,
+        $goalId
     );
 }
 $bench->end();
@@ -44,7 +50,7 @@ $bench->end();
 $stations = [];
 foreach($seoulMetro->getVertices() as $station) {
     /* @var \Upgle\Model\Station $station */
-    $stations[] = [
+    $stations[$station->getId()] = [
         "id" => $station->getId(),
         "name" => $station->getName(),
         "line" => $station->getLine()
@@ -73,10 +79,10 @@ foreach($seoulMetro->getVertices() as $station) {
 </div>
 <div id="sidebar">
     <form action="/" id="form-search">
-        <input name="goal" class="goal" type="hidden" />
-        <input name="start" class="start" type="hidden" />
-        <input class="start_typeahead" type="text" placeholder="출발 역">
-        <input class="goal_typeahead" type="text" placeholder="도착 역">
+        <input name="goal" class="goal" type="hidden" value="<?=$goalId?>" />
+        <input name="start" class="start" type="hidden" value="<?=$startId?>"/>
+        <input class="start_typeahead" type="text" placeholder="출발 역" value="<?=$stations[$startId]["name"]?>">
+        <input class="goal_typeahead" type="text" placeholder="도착 역" value="<?=$stations[$goalId]["name"]?>">
         <button type="submit" class="btn-search" value="빠른길 찾기"><i class="xi-magnifier"></i> 빠른길 찾기</button>
     </form>
     <ul id="subway-route">
