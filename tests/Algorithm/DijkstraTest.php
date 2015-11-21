@@ -21,6 +21,10 @@ class DijkstraTest extends \PHPUnit_Framework_TestCase
         $dijkstra = new Dijkstra($graph);
         $path = $dijkstra->getShortestPath("A", "C");
 
+        /**
+         * 최단 경로 체크
+         * @var Vertex $vertex
+         */
         $pathString = "";
         foreach($path as $vertex) {
             $pathString .= $vertex->getId();
