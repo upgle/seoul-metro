@@ -353,8 +353,8 @@ html, body {
 
 .tt-menu {
     width: 245px;
-    margin: 12px 0;
-    padding: 8px 0;
+    margin: 0;
+    padding: 5px 0;
     background-color: #fff;
     border: 1px solid #ccc;
     -webkit-border-radius: 2px;
@@ -363,10 +363,11 @@ html, body {
     -webkit-box-shadow: 0 5px 5px rgba(0,0,0,.1);
     -moz-box-shadow: 0 5px 5px rgba(0,0,0,.1);
     box-shadow: 0 5px 5px rgba(0,0,0,.1);
+    box-sizing: border-box;
 }
 .tt-suggestion {
     padding: 3px 20px;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 24px;
 }
 .tt-suggestion:hover {
