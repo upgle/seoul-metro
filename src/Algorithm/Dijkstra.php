@@ -69,7 +69,6 @@ class Dijkstra implements ShortestPathInterface {
         return array_reverse($S);
     }
 
-
     /**
      * Get Shortest Path.
      * @param $startId
@@ -101,9 +100,13 @@ class Dijkstra implements ShortestPathInterface {
          * @var Vertex $u
          * @var Vertex $v
          */
-        while(count($Q) > 0) {
+        while(!empty($Q)) {
+
             $u = $this->getClosetVertex($dist, $Q);
             unset($Q[$u->getId()]);
+
+            //도착지점 발견 시 중단
+            if($u->getId() == $goalId) break;
 
             foreach($u->getConnectedVertices() as $v){
                 $edge = $this->graph->getEdgeById($u->getId(), $v->getId());
