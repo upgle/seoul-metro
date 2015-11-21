@@ -76,4 +76,25 @@ class Graph
     {
         $this->vertices = $vertices;
     }
+
+    /**
+     * @param string $vertexIdOfA
+     * @param string $vertexIdOfB
+     */
+    public function connectOneWay($vertexIdOfA, $vertexIdOfB, $weight) {
+        $vertexA = $this->getVertexById($vertexIdOfA);
+        $vertexB = $this->getVertexById($vertexIdOfB);
+        $vertexA->connect($vertexB);
+        $this->setEdge(new Edge($vertexA, $vertexB, $weight));
+    }
+
+    /**
+     * @param $vertexIdOfA
+     * @param $vertexIdOfB
+     * @param $weight
+     */
+    public function connectTwoWay($vertexIdOfA, $vertexIdOfB, $weight) {
+        $this->connectOneWay($vertexIdOfA, $vertexIdOfB, $weight);
+        $this->connectOneWay($vertexIdOfB, $vertexIdOfA, $weight);
+    }
 }
