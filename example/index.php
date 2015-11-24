@@ -139,13 +139,37 @@ foreach($seoulMetro->getVertices() as $station) {
         // `states` is an array of state names defined in "The Basics"
         local: states
     });
-    $('.start_typeahead').typeahead({ hint: true, highlight: true, minLength: 1 },
-        { name: 'states', displayKey: "name", source: states
+    $('.start_typeahead').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+        },
+        {
+            name: 'states',
+            displayKey: "name",
+            source: states,
+            templates: {
+                suggestion: function (data) {
+                    return '<div><strong>' + data.name + '</strong> - ' + data.line + '호선</div>';
+                }
+            }
         }).on('typeahead:selected', function(event, data){
             $('.start').val(data.id);
         });
-    $('.goal_typeahead').typeahead({ hint: true, highlight: true, minLength: 1 },
-        { name: 'states', displayKey: "name", source: states
+    $('.goal_typeahead').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+        },
+        {
+            name: 'states',
+            displayKey: "name",
+            source: states,
+            templates: {
+                suggestion: function (data) {
+                    return '<div><strong>' + data.name + '</strong> - ' + data.line + '호선</div>';
+                }
+            }
         }).on('typeahead:selected', function(event, data){
             $('.goal').val(data.id);
         });
