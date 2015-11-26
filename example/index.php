@@ -4,6 +4,7 @@ namespace Example;
 use Upgle\Importer\ExcelImporter;
 use Upgle\Algorithm\Dijkstra;
 use Upgle\Model\SeoulMetro;
+use Upgle\Support\GoogleMap;
 
 /**
  * Composer Autoload
@@ -45,6 +46,12 @@ if($startId && $goalId) {
 $bench->end();
 
 /**
+ * Google Map Helper
+ */
+$googleMap = new GoogleMap($path);
+$googleMapCenter = $googleMap->getCenter();
+
+/**
  * get Stations list
  */
 $stations = [];
@@ -56,7 +63,6 @@ foreach($seoulMetro->getVertices() as $station) {
         "line" => $station->getLine()
     ];
 }
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -92,33 +98,33 @@ foreach($seoulMetro->getVertices() as $station) {
         <?php endforeach; ?>
     </ul>
 </div>
+
 <div id="map"></div>
 <script>
     function initMap() {
 
-        var flightPlanCoordinates = [
-            <?php foreach ($path as $key => $station) : ?>
-            {lat: <?=$station->getLatitude()?>, lng:  <?=$station->getLongitude()?>},
-            <?php endforeach; ?>
-        ];
-
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 12,
-            center: {lat: 37.55982, lng: 126.989143}
+            center: {lat: <?=$googleMapCenter["latitude"]?>, lng: <?=$googleMapCenter["longitude"]?>}
         });
 
         <?php foreach ($path as $station) : ?>
             addMarker({lat: <?=$station->getLatitude()?>, lng: <?=$station->getLongitude()?>}, map);
         <?php endforeach; ?>
 
-        var flightPath = new google.maps.Polyline({
-            path: flightPlanCoordinates,
+        var subwayPlanCoordinates = [
+            <?php foreach ($path as $key => $station) : ?>
+            {lat: <?=$station->getLatitude()?>, lng:  <?=$station->getLongitude()?>},
+            <?php endforeach; ?>
+        ];
+        var subwayPath = new google.maps.Polyline({
+            path: subwayPlanCoordinates,
             geodesic: true,
             strokeColor: '#003291',
             strokeOpacity: 1.0,
             strokeWeight: 6
         });
-        flightPath.setMap(map);
+        subwayPath.setMap(map);
     }
 
     // Adds a marker to the map.
