@@ -19,6 +19,11 @@ class Station extends Vertex
     private $latitude;
 
     /**
+     * @var bool
+     */
+    private $transferStation = false;
+
+    /**
      * @return float
      */
     public function getLatitude()
@@ -32,6 +37,22 @@ class Station extends Vertex
     public function setLatitude($latitude)
     {
         $this->latitude = $latitude;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isTransferStation()
+    {
+        return $this->transferStation;
+    }
+
+    /**
+     * @param boolean $transferStation
+     */
+    public function setTransferStation($transferStation)
+    {
+        $this->transferStation = $transferStation;
     }
 
     /**
