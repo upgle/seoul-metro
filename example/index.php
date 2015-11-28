@@ -19,6 +19,7 @@ date_default_timezone_set('Europe/London');
  */
 $startId = (isset($_GET["start"]) && is_numeric($_GET["start"])) ? $_GET["start"] : NULL;
 $goalId = (isset($_GET["goal"]) && is_numeric($_GET["goal"])) ? $_GET["goal"] : NULL;
+$searchTarget = (isset($_GET["target"])) ? $_GET["target"] : NULL;
 
 /**
  * Initilize SeoulMetro Graph
@@ -30,6 +31,13 @@ $seoulMetro = new SeoulMetro();
  */
 $importer = new ExcelImporter(EXCEL_PATH, $seoulMetro);
 $importer->import();
+
+/**
+ * 최소 시간 or 최소 환승
+ */
+if($searchTarget == "minTransfer") {
+    $seoulMetro->setTransferWeightHeavy();
+}
 
 /**
  * Benchmark Dijkstra Algorithm
@@ -103,8 +111,8 @@ foreach($seoulMetro->getVertices() as $station) {
         <button type="submit" class="btn-search" value="빠른길 찾기"><i class="xi-magnifier"></i> 빠른길 찾기</button>
 
         <ul class="searching-option">
-            <li class="active">최소 시간</li>
-            <li>최소 환승</li>
+            <li class="minTime <?php if($searchTarget!="minTransfer"):?> active<?php endif; ?>">최소 시간</li>
+            <li class="minTransfer <?php if($searchTarget=="minTransfer"):?> active<?php endif; ?>">최소 환승</li>
         </ul>
     </form>
 
@@ -171,6 +179,17 @@ foreach($seoulMetro->getVertices() as $station) {
         // `states` is an array of state names defined in "The Basics"
         local: states
     });
+
+    $('.minTime').click(function(){
+        $("input[name=target]").val("minTime");
+        $("#form-search").submit();
+    });
+
+    $('.minTransfer').click(function(){
+        $("input[name=target]").val("minTransfer");
+        $("#form-search").submit();
+    });
+
     $('.start_typeahead').typeahead({
             hint: true,
             highlight: true,

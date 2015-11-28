@@ -58,4 +58,16 @@ class SeoulMetro extends Graph
         }
         return NULL;
     }
+
+    /**
+     * 환승에 대한 가중치를 최대로 설정합니다
+     * 최소 환승시 호출합니다.
+     */
+    public function setTransferWeightHeavy() {
+        foreach($this->transferPair as $transferA => $children) {
+            foreach($children as $transferB => $val) {
+                $this->getEdgeById($transferA, $transferB)->setWeight(500);
+            }
+        }
+    }
 }

@@ -32,7 +32,7 @@ class Graph
     /**
      * @param $vertexIdOfA
      * @param $vertexIdOfB
-     * @return mixed
+     * @return Edge
      */
     public function getEdgeById($vertexIdOfA, $vertexIdOfB) {
         return $this->edges[$vertexIdOfA][$vertexIdOfB];
