@@ -31,7 +31,7 @@ class Path
     /**
      * @var \Upgle\Model\Station[]
      */
-    private $path;
+    private $path = [];
 
     /**
      * @var Graph
@@ -76,6 +76,8 @@ class Path
      */
     private function init() {
 
+        if(count($this->path) == 0) return;
+
         $prev = $this->path[0];
         $this->setColorPath($prev);
 
@@ -91,14 +93,6 @@ class Path
             $this->setColorPath($this->path[$i]);
             $prev = $this->path[$i];
         }
-//
-//        foreach($this->colorPath as $color => $stations) {
-//            echo $color . PHP_EOL;
-//            /** @var \Upgle\Model\Station $station */
-//            foreach($stations as $station) {
-//                echo $station->getName() . PHP_EOL;
-//            }
-//        }
     }
 
     /**
