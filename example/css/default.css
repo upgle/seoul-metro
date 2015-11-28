@@ -43,27 +43,61 @@ html, body {
     margin-left:280px;
     height: 100%;
 }
-#sidebar {
+
+.sidebar {
     height:100%;
     position: absolute;
     left: 0;
     top: 0;
-    width: 280px;
+    width: 290px;
     background: #fff;
     border-right: 1px solid #aaa;
     z-index: 90;
     font-size: 13px;
-    padding-top: 195px;
+    padding-top: 228px;
     box-sizing: border-box;
 }
-#subway-route {
-    margin: 0;
-    padding: 13px 0 0;
+
+.subway-information {
     height: 100%;
+    overflow-y: auto;
+}
+.subway-information .subway-information-summary {
+    margin: 20px 20px 10px;
+    padding: 13px 10px;
+    border: 1px solid #EBEBEB;
+    background: #fcfcfc;
+    font-size: 12px;
+}
+.subway-information .subway-information-summary > ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.subway-information .subway-information-summary > ul li {
+    display: inline-block;
+}
+.subway-information .subway-information-summary > ul li .data {
+    font-weight: bold;
+    color : #f00;
+}
+.subway-information .subway-information-summary > ul li + li {
+    margin-left: 10px;
+}
+.subway-information .subway-information-summary > ul li + li:before {
+    position: relative;
+    left: -5px;
+    content : '|';
+    color:#ddd;
+}
+
+.subway-route {
+    margin: 0;
+    padding: 0;
     overflow: auto;
     box-sizing: border-box;
 }
-#subway-route li {
+.subway-route li {
     position: relative;
     list-style: none;
     padding: 0 0 0 22px;
@@ -73,10 +107,10 @@ html, body {
     font-size: 12px;
     font-weight:bold;
 }
-#subway-route li:first-child {
+.subway-route li:first-child {
     margin-top: 0;
 }
-#subway-route .mark {
+.subway-route .mark {
     position: relative;
     display: inline-block;
     top: 5px;
@@ -91,7 +125,7 @@ html, body {
     font-weight: bold;
 }
 
-#subway-route .line + .line:before {
+.subway-route .line + .line:before {
     position: absolute;
     display: block;
     border-left: 4px dotted #ccc;
@@ -106,45 +140,45 @@ html, body {
 }
 
 
-#subway-route .line1 + .line1,
-#subway-route .line2 + .line2,
-#subway-route .line3 + .line3,
-#subway-route .line4 + .line4,
-#subway-route .line5 + .line5,
-#subway-route .line6 + .line6,
-#subway-route .line7 + .line7,
-#subway-route .line8 + .line8,
-#subway-route .line9 + .line9,
-#subway-route .lineU + .lineU,
-#subway-route .lineSU + .lineSU,
-#subway-route .lineS + .lineS,
-#subway-route .lineK + .lineK,
-#subway-route .lineI + .lineI,
-#subway-route .lineG + .lineG,
-#subway-route .lineE + .lineE,
-#subway-route .lineB + .lineB,
-#subway-route .lineA + .lineA {
+.subway-route .line1 + .line1,
+.subway-route .line2 + .line2,
+.subway-route .line3 + .line3,
+.subway-route .line4 + .line4,
+.subway-route .line5 + .line5,
+.subway-route .line6 + .line6,
+.subway-route .line7 + .line7,
+.subway-route .line8 + .line8,
+.subway-route .line9 + .line9,
+.subway-route .lineU + .lineU,
+.subway-route .lineSU + .lineSU,
+.subway-route .lineS + .lineS,
+.subway-route .lineK + .lineK,
+.subway-route .lineI + .lineI,
+.subway-route .lineG + .lineG,
+.subway-route .lineE + .lineE,
+.subway-route .lineB + .lineB,
+.subway-route .lineA + .lineA {
     margin-top: 0;
 }
 
-#subway-route .line1 + .line1:before,
-#subway-route .line2 + .line2:before,
-#subway-route .line3 + .line3:before,
-#subway-route .line4 + .line4:before,
-#subway-route .line5 + .line5:before,
-#subway-route .line6 + .line6:before,
-#subway-route .line7 + .line7:before,
-#subway-route .line8 + .line8:before,
-#subway-route .line9 + .line9:before,
-#subway-route .lineU + .lineU:before,
-#subway-route .lineSU + .lineSU:before,
-#subway-route .lineS + .lineS:before,
-#subway-route .lineK + .lineK:before,
-#subway-route .lineI + .lineI:before,
-#subway-route .lineG + .lineG:before,
-#subway-route .lineE + .lineE:before,
-#subway-route .lineB + .lineB:before,
-#subway-route .lineA + .lineA:before {
+.subway-route .line1 + .line1:before,
+.subway-route .line2 + .line2:before,
+.subway-route .line3 + .line3:before,
+.subway-route .line4 + .line4:before,
+.subway-route .line5 + .line5:before,
+.subway-route .line6 + .line6:before,
+.subway-route .line7 + .line7:before,
+.subway-route .line8 + .line8:before,
+.subway-route .line9 + .line9:before,
+.subway-route .lineU + .lineU:before,
+.subway-route .lineSU + .lineSU:before,
+.subway-route .lineS + .lineS:before,
+.subway-route .lineK + .lineK:before,
+.subway-route .lineI + .lineI:before,
+.subway-route .lineG + .lineG:before,
+.subway-route .lineE + .lineE:before,
+.subway-route .lineB + .lineB:before,
+.subway-route .lineA + .lineA:before {
     border-left-style : solid;
     top: -10px;
     left:29px;
@@ -152,156 +186,156 @@ html, body {
     content : "";
 }
 
-#subway-route .line1 .mark {
+.subway-route .line1 .mark {
     border-color: #003291;
     color: #003291;
 }
-#subway-route .line1 + .line1:before {
+.subway-route .line1 + .line1:before {
     border-color : #003291;
 }
 
-#subway-route .line2 .mark {
+.subway-route .line2 .mark {
     border-color: #37b42d;
     color: #37b42d;
 }
-#subway-route .line2 + .line2:before {
+.subway-route .line2 + .line2:before {
     border-color : #37b42d;
 }
 
-#subway-route .line3 .mark {
+.subway-route .line3 .mark {
     border-color: #fa5f2c;
     color: #fa5f2c;
 }
-#subway-route .line3 + .line3:before {
+.subway-route .line3 + .line3:before {
     border-color : #fa5f2c;
 }
 
-#subway-route .line4 .mark {
+.subway-route .line4 .mark {
     border-color: #2c9ede;
     color: #2c9ede;
 }
-#subway-route .line4 + .line4:before {
+.subway-route .line4 + .line4:before {
     border-color : #2c9ede;
 }
 
-#subway-route .line5 .mark {
+.subway-route .line5 .mark {
     border-color: #8539b0;
     color: #8539b0;
 }
-#subway-route .line5 + .line5:before {
+.subway-route .line5 + .line5:before {
     border-color : #8539b0;
 }
 
-#subway-route .line6 .mark {
+.subway-route .line6 .mark {
     border-color: #9a4e0f;
     color: #9a4e0f;
 }
-#subway-route .line6 + .line6:before {
+.subway-route .line6 + .line6:before {
     border-color : #9a4e0f;
 }
 
-#subway-route .line7 .mark {
+.subway-route .line7 .mark {
     border-color: #606d00;
     color: #606d00;
 }
-#subway-route .line7 + .line7:before {
+.subway-route .line7 + .line7:before {
     border-color : #606d00;
 }
 
-#subway-route .line8 .mark {
+.subway-route .line8 .mark {
     border-color: #e71e6e;
     color: #e71e6e;
 }
-#subway-route .line8 + .line8:before {
+.subway-route .line8 + .line8:before {
     border-color : #e71e6e;
 }
 
-#subway-route .line9 .mark {
+.subway-route .line9 .mark {
     border-color: #bf9f1e;
     color: #bf9f1e;
 }
-#subway-route .line9 + .line9:before {
+.subway-route .line9 + .line9:before {
     border-color : #bf9f1e;
 }
 
 /* 의정부 경전철 */
-#subway-route .lineU .mark {
+.subway-route .lineU .mark {
     border-color: #fd8d00;
     color: #fd8d00;
 }
-#subway-route .lineU + .lineU:before {
+.subway-route .lineU + .lineU:before {
     border-color : #fd8d00;
 }
 
 /* 수인선 */
-#subway-route .lineSU .mark {
+.subway-route .lineSU .mark {
     border-color: #edb217;
     color: #edb217;
 }
-#subway-route .lineSU + .lineSU:before {
+.subway-route .lineSU + .lineSU:before {
     border-color : #edb217;
 }
 
 /* 신분당선 */
-#subway-route .lineS .mark {
+.subway-route .lineS .mark {
     border-color: #a6032d;
     color: #a6032d;
 }
-#subway-route .lineS + .lineS:before {
+.subway-route .lineS + .lineS:before {
     border-color : #a6032d;
 }
 
 /* 경의중앙선 */
-#subway-route .lineK .mark {
+.subway-route .lineK .mark {
     border-color: #7dc4a5;
     color: #7dc4a5;
 }
-#subway-route .lineK + .lineK:before {
+.subway-route .lineK + .lineK:before {
     border-color : #7dc4a5;
 }
 
 /* 인천1호선 */
-#subway-route .lineI .mark {
+.subway-route .lineI .mark {
     border-color: #6691c8;
     color: #6691c8;
 }
-#subway-route .lineI + .lineI:before {
+.subway-route .lineI + .lineI:before {
     border-color : #6691c8;
 }
 
 /* 경춘 */
-#subway-route .lineG .mark {
+.subway-route .lineG .mark {
     border-color: #26a97f;
     color: #26a97f;
 }
-#subway-route .lineG + .lineG:before {
+.subway-route .lineG + .lineG:before {
     border-color : #26a97f;
 }
 
 /* 에버라인 */
-#subway-route .lineE .mark {
+.subway-route .lineE .mark {
     border-color: #77c371;
     color: #77c371;
 }
-#subway-route .lineE + .lineE:before {
+.subway-route .lineE + .lineE:before {
     border-color : #77c371;
 }
 
 /* 분당선 */
-#subway-route .lineB .mark {
+.subway-route .lineB .mark {
     border-color: #edb217;
     color: #edb217;
 }
-#subway-route .lineB + .lineB:before {
+.subway-route .lineB + .lineB:before {
     border-color : #edb217;
 }
 
 /* 공항철도 */
-#subway-route .lineA .mark {
+.subway-route .lineA .mark {
     border-color: #70b7e5;
     color: #70b7e5;
 }
-#subway-route .lineA + .lineA:before {
+.subway-route .lineA + .lineA:before {
     border-color : #70b7e5;
 }
 
@@ -309,7 +343,7 @@ html, body {
     position: absolute;
     top: 49px;
     background: #fafafa;
-    padding: 16px 17px;
+    padding: 20px 20px 0;
     border-bottom: 1px solid #eee;
 }
 #form-search input[type=text] {
@@ -322,13 +356,74 @@ html, body {
 }
 #form-search .btn-search {
     height: 35px;
-    margin-top: 5px;
+    margin-top: 0px;
     background: #ffffff;
     border: 1px solid #bbb;
     cursor: pointer;
     width: 100%;
     font-size: 12px;
 }
+#form-search .btn-search:hover,
+#form-search .btn-search:active,
+#form-search .btn-search:focus {
+    color: #000;
+    border-color : #999;
+}
+
+#form-search .searching-option {
+    position : relative;
+    bottom : -1px;
+    margin : 20px 0 0;
+    padding : 0;
+    list-style: none;
+    font-size: 12px;
+}
+
+#form-search .searching-option li {
+    float : left;
+    height: 30px;
+    margin-right: 4px;
+    line-height: 30px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    width: 82px;
+    color:#333;
+    text-align: center;
+    opacity: 0.5;
+    cursor: pointer;
+    -webkit-transition: opacity 0.05s ease-in-out;
+    -moz-transition: opacity 0.05s ease-in-out;
+    -ms-transition: opacity 0.05s ease-in-out;
+    -o-transition: opacity 0.05s ease-in-out;
+    transition: opacity 0.05s ease-in-out;
+}
+#form-search .searching-option li.active,
+#form-search .searching-option li:hover,
+#form-search .searching-option li:focus,
+#form-search .searching-option li:active {
+    opacity: 1;
+}
+
+#form-search .btn-option {
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 20px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-bottom : 0;
+    cursor: pointer;
+    width: 82px;
+    font-size: 12px;
+    color:#333;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    text-decoration : none;
+}
+
 
 .twitter-typeahead {
     width: 100%;

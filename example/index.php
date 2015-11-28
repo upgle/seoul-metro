@@ -80,23 +80,43 @@ foreach($seoulMetro->getVertices() as $station) {
 <div id="nav">
     <h1><i class="xi-subway"></i> SEOUL Metro</h1>
     <ul class="statistics">
+        <li>전체역 <?=count($path)?></li>
         <li>알고리즘 연산 시간 : <strong><?=$bench->getTime()?></strong></li>
         <li>메모리 피크 : <strong><?=$bench->getMemoryPeak()?></strong></li>
     </ul>
 </div>
-<div id="sidebar">
+
+<div class="sidebar">
     <form action="/" id="form-search">
-        <input name="goal" class="goal" type="hidden" value="<?=$goalId?>" />
-        <input name="start" class="start" type="hidden" value="<?=$startId?>"/>
+        <input type="hidden" name="target" value="" />
+        <input type="hidden" name="goal" class="goal" value="<?=$goalId?>" />
+        <input type="hidden" name="start" class="start" value="<?=$startId?>"/>
+
         <input class="start_typeahead" type="text" placeholder="출발 역" value="<?=$seoulMetro->getStationNameById($startId)?>">
         <input class="goal_typeahead" type="text" placeholder="도착 역" value="<?=$seoulMetro->getStationNameById($goalId)?>">
         <button type="submit" class="btn-search" value="빠른길 찾기"><i class="xi-magnifier"></i> 빠른길 찾기</button>
+
+        <ul class="searching-option">
+            <li class="active">최소 시간</li>
+            <li>최소 환승</li>
+        </ul>
     </form>
-    <ul id="subway-route">
-        <?php foreach ($path as $station) : ?>
-        <li class="line line<?=$station->getLine()?>"><span class="mark"></span><?=$station->getName()?> (<?=$station->getLine()?>호선)</li>
-        <?php endforeach; ?>
-    </ul>
+
+    <div class="subway-information">
+        <div class="subway-information-summary">
+            <ul>
+                <li>소요시간 <span class="data">19분</span></li>
+                <li>정차역 <span class="data">18개</span></li>
+                <li>환승 <span class="data">11개</span></li>
+            </ul>
+        </div>
+        <ul class="subway-route subway-information-route">
+            <?php foreach ($path as $station) : ?>
+                <li class="line line<?=$station->getLine()?>"><span class="mark"></span><?=$station->getName()?> (<?=$station->getLine()?>호선)</li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+
 </div>
 
 <div id="map"></div>
