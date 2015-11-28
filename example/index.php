@@ -86,6 +86,7 @@ foreach($seoulMetro->getVertices() as $station) {
     <title>SEOUL Metro</title>
     <script src="js/jquery-1.11.3.min.js"></script>
     <script src="js/typeahead.bundle.min.js"></script>
+    <script src="js/metro.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:600' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/xeicon/1.0.4/xeicon.min.css">
     <link rel="stylesheet" href="css/default.css">
@@ -94,29 +95,25 @@ foreach($seoulMetro->getVertices() as $station) {
 <div id="nav">
     <h1><i class="xi-subway"></i> SEOUL Metro</h1>
     <ul class="statistics">
-        <li>전체역 <?=count($path)?></li>
         <li>알고리즘 연산 시간 : <strong><?=$bench->getTime()?></strong></li>
         <li>메모리 피크 : <strong><?=$bench->getMemoryPeak()?></strong></li>
     </ul>
 </div>
-
 <div class="sidebar">
     <form action="/" id="form-search">
         <input type="hidden" name="target" value="" />
         <input type="hidden" name="goal" class="goal" value="<?=$goalId?>" />
         <input type="hidden" name="start" class="start" value="<?=$startId?>"/>
-
         <input class="start_typeahead" type="text" placeholder="출발 역" value="<?=$seoulMetro->getStationNameById($startId)?>">
         <input class="goal_typeahead" type="text" placeholder="도착 역" value="<?=$seoulMetro->getStationNameById($goalId)?>">
         <button type="submit" class="btn-search" value="빠른길 찾기"><i class="xi-magnifier"></i> 빠른길 찾기</button>
-
         <ul class="searching-option">
             <li class="minTime <?php if($searchTarget!="minTransfer"):?> active<?php endif; ?>">최소 시간</li>
             <li class="minTransfer <?php if($searchTarget=="minTransfer"):?> active<?php endif; ?>">최소 환승</li>
         </ul>
     </form>
-
     <div class="subway-information">
+        <?php if(count($path) > 0) : ?>
         <div class="subway-information-summary">
             <ul>
                 <li>소요시간 <span class="data"><?=$pathInfo->getMinutes()?>분</span></li>
@@ -129,21 +126,18 @@ foreach($seoulMetro->getVertices() as $station) {
                 <li class="line line<?=$station->getLine()?>"><span class="mark"></span><?=$station->getName()?> (<?=$station->getLine()?>호선)</li>
             <?php endforeach; ?>
         </ul>
+        <?php endif; ?>
     </div>
-
 </div>
-
 <div id="map"></div>
 <script>
     function initMap() {
-
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 12,
             center: {lat: <?=$googleMapCenter["latitude"]?>, lng: <?=$googleMapCenter["longitude"]?>}
         });
-
         <?php foreach ($path as $station) : ?>
-            addMarker({lat: <?=$station->getLatitude()?>, lng: <?=$station->getLongitude()?>}, map);
+        addMarker({lat: <?=$station->getLatitude()?>, lng: <?=$station->getLongitude()?>}, map);
         <?php endforeach; ?>
 
         var subwayPlanCoordinates = [
@@ -160,70 +154,13 @@ foreach($seoulMetro->getVertices() as $station) {
         });
         subwayPath.setMap(map);
     }
-
-    // Adds a marker to the map.
     function addMarker(location, map) {
         var marker = new google.maps.Marker({
             position: location,
             map: map
         });
     }
-
-    var states = <?=json_encode($stations)?>;
-    states = new Bloodhound({
-        datumTokenizer: function(d) {
-            return Bloodhound.tokenizers.whitespace(d.name);
-        },
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        identify: function(obj) { return obj.id; },
-        // `states` is an array of state names defined in "The Basics"
-        local: states
-    });
-
-    $('.minTime').click(function(){
-        $("input[name=target]").val("minTime");
-        $("#form-search").submit();
-    });
-
-    $('.minTransfer').click(function(){
-        $("input[name=target]").val("minTransfer");
-        $("#form-search").submit();
-    });
-
-    $('.start_typeahead').typeahead({
-            hint: true,
-            highlight: true,
-            minLength: 1
-        },
-        {
-            name: 'states',
-            displayKey: "name",
-            source: states,
-            templates: {
-                suggestion: function (data) {
-                    return '<div><strong>' + data.name + '</strong> - ' + data.line + '호선</div>';
-                }
-            }
-        }).on('typeahead:selected', function(event, data){
-            $('.start').val(data.id);
-        });
-    $('.goal_typeahead').typeahead({
-            hint: true,
-            highlight: true,
-            minLength: 1
-        },
-        {
-            name: 'states',
-            displayKey: "name",
-            source: states,
-            templates: {
-                suggestion: function (data) {
-                    return '<div><strong>' + data.name + '</strong> - ' + data.line + '호선</div>';
-                }
-            }
-        }).on('typeahead:selected', function(event, data){
-            $('.goal').val(data.id);
-        });
+    var statesData = <?=json_encode($stations)?>;
 </script>
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBeu1Js2eiRwejCHm4gmhaE8I4Oxg-BFSg&signed_in=true&callback=initMap"></script>
