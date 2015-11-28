@@ -131,8 +131,10 @@ foreach($seoulMetro->getVertices() as $station) {
 </div>
 <div id="map"></div>
 <script type="text/javascript">
-    function initMap() {
 
+    var statesData = <?=json_encode($stations)?>;
+
+    function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 12,
             center: {lat: <?=$googleMapCenter["latitude"]?>, lng: <?=$googleMapCenter["longitude"]?>}
@@ -180,7 +182,6 @@ foreach($seoulMetro->getVertices() as $station) {
             }
         });
     }
-    var statesData = <?=json_encode($stations)?>;
 </script>
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBeu1Js2eiRwejCHm4gmhaE8I4Oxg-BFSg&signed_in=true&callback=initMap"></script>
