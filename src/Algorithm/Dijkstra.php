@@ -4,6 +4,10 @@ namespace Upgle\Algorithm;
 use Upgle\Model\Graph;
 use Upgle\Model\Vertex;
 
+/**
+ * Class Dijkstra
+ * @package Upgle\Algorithm
+ */
 class Dijkstra implements ShortestPathInterface {
 
     /**
@@ -71,6 +75,32 @@ class Dijkstra implements ShortestPathInterface {
 
     /**
      * Get Shortest Path.
+     *
+     * ## 수도코드(Pseudocode)
+     *
+     * 1  function Dijkstra(Graph, source):
+     * 2
+     * 3      create vertex set Q
+     * 4
+     * 5      for each vertex v in Graph:             // Initialization
+     * 6          dist[v] ← INFINITY                  // Unknown distance from source to v
+     * 7          prev[v] ← UNDEFINED                 // Previous node in optimal path from source
+     * 8          add v to Q                          // All nodes initially in Q (unvisited nodes)
+     * 9
+     * 10      dist[source] ← 0                        // Distance from source to source
+     * 11
+     * 12      while Q is not empty:
+     * 13          u ← vertex in Q with min dist[u]    // Source node will be selected first
+     * 14          remove u from Q
+     * 15
+     * 16          for each neighbor v of u:           // where v is still in Q.
+     * 17              alt ← dist[u] + length(u, v)
+     * 18              if alt < dist[v]:               // A shorter path to v has been found
+     * 19                  dist[v] ← alt
+     * 20                  prev[v] ← u
+     * 21
+     * 22      return dist[], prev[]
+     *
      * @param $startId
      * @param $goalId
      * @return array
@@ -78,6 +108,8 @@ class Dijkstra implements ShortestPathInterface {
     public function getShortestPath($startId, $goalId) {
 
         /**
+         * create vertex set Q
+         *
          * @var Vertex[] $Q
          * @var Vertex[] $prev
          * @var int[] $dist
@@ -96,7 +128,7 @@ class Dijkstra implements ShortestPathInterface {
         $dist[$startId] = 0;
 
         /**
-         * 탐색 작업
+         * 최단거리 탐색 작업
          * @var Vertex $u
          * @var Vertex $v
          */
@@ -114,7 +146,9 @@ class Dijkstra implements ShortestPathInterface {
                 $alt = $dist[$u->getId()] + $edge->getWeight();
                 if($alt < $dist[$v->getId()]) {
                     $dist[$v->getId()] = $alt;
-                    $prev[$v->getId()] = $u; //바로 직전 Vertex 기록 (for path planning)
+
+                    //바로 직전 Vertex 기록 (for path planning)
+                    $prev[$v->getId()] = $u;
                 }
             }
         }
