@@ -3,9 +3,31 @@ namespace Upgle\Support;
 
 use Upgle\Model\Graph;
 use Upgle\Model\SeoulMetro;
+use Upgle\Model\Station;
 
 class Path
 {
+    public static $COLOR = [
+        "1" => "#003291",
+        "2" => "#37b42d",
+        "3" => "#fa5f2c",
+        "4" => "#2c9ede",
+        "5" => "#8539b0",
+        "6" => "#9a4e0f",
+        "7" => "#606d00",
+        "8" => "#e71e6e",
+        "9" => "#bf9f1e",
+        "U" => "#fd8d00",
+        "SU" => "#edb217",
+        "S" => "#a6032d",
+        "K" => "#7dc4a5",
+        "I" => "#6691c8",
+        "G" => "#26a97f",
+        "E" => "#77c371",
+        "B" => "#edb217",
+        "A" => "#70b7e5"
+    ];
+
     /**
      * @var \Upgle\Model\Station[]
      */
@@ -32,6 +54,11 @@ class Path
     private $transferCount = 0;
 
     /**
+     * @var array
+     */
+    private $colorPath = [];
+
+    /**
      * Path constructor
      * @param SeoulMetro $graph
      * @param array $path
@@ -48,16 +75,46 @@ class Path
      * Initialize
      */
     private function init() {
+
         $prev = $this->path[0];
+        $this->setColorPath($prev);
+
         for($i=1; $i< count($this->path); $i++) {
             if(!$this->graph->isTransferPair($prev->getId(), $this->path[$i]->getId())) {
                 $this->minutes += $this->graph->getEdge($prev, $this->path[$i])->getWeight();
                 $this->stationCount++;
             } else {
+                // 환승 평균 시간 6분으로 고정
+                $this->minutes += 6;
                 $this->transferCount++;
             }
+            $this->setColorPath($this->path[$i]);
             $prev = $this->path[$i];
         }
+//
+//        foreach($this->colorPath as $color => $stations) {
+//            echo $color . PHP_EOL;
+//            /** @var \Upgle\Model\Station $station */
+//            foreach($stations as $station) {
+//                echo $station->getName() . PHP_EOL;
+//            }
+//        }
+    }
+
+    /**
+     * @param Station $station
+     */
+    private function setColorPath(Station $station) {
+        $lineColor = Path::$COLOR[$station->getLine()];
+        $this->colorPath[$lineColor][] = $station;
+    }
+
+    /**
+     * @return array
+     */
+    public function getColorPath()
+    {
+        return $this->colorPath;
     }
 
     /**

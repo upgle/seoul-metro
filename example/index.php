@@ -130,34 +130,54 @@ foreach($seoulMetro->getVertices() as $station) {
     </div>
 </div>
 <div id="map"></div>
-<script>
+<script type="text/javascript">
     function initMap() {
+
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 12,
             center: {lat: <?=$googleMapCenter["latitude"]?>, lng: <?=$googleMapCenter["longitude"]?>}
         });
+
+        /**
+         * 지하철 정류장 표시
+         */
         <?php foreach ($path as $station) : ?>
         addMarker({lat: <?=$station->getLatitude()?>, lng: <?=$station->getLongitude()?>}, map);
         <?php endforeach; ?>
 
-        var subwayPlanCoordinates = [
-            <?php foreach ($path as $key => $station) : ?>
+        /**
+         * 지하철 경로 표시
+         */
+        var subwayPlanCoordinates;
+        var subwayPath;
+        <?php foreach ($pathInfo->getColorPath() as $color => $stations) : ?>
+        subwayPlanCoordinates = [
+            <?php foreach ($stations as $station) : ?>
             {lat: <?=$station->getLatitude()?>, lng:  <?=$station->getLongitude()?>},
             <?php endforeach; ?>
         ];
-        var subwayPath = new google.maps.Polyline({
+        subwayPath = new google.maps.Polyline({
             path: subwayPlanCoordinates,
             geodesic: true,
-            strokeColor: '#003291',
+            strokeColor: "<?=$color?>",
             strokeOpacity: 1.0,
-            strokeWeight: 6
+            strokeWeight: 8
         });
         subwayPath.setMap(map);
+        <?php endforeach; ?>
     }
     function addMarker(location, map) {
         var marker = new google.maps.Marker({
             position: location,
-            map: map
+            map: map,
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 6,
+                fillColor: "yellow",
+                fillOpacity: 1.0,
+                strokeColor: "black",
+                strokeWeight: 4
+            }
         });
     }
     var statesData = <?=json_encode($stations)?>;
