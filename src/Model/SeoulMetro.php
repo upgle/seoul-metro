@@ -60,6 +60,22 @@ class SeoulMetro extends Graph
     }
 
     /**
+     * @return array
+     */
+    public function getStationsToArray() {
+        $stations = [];
+        foreach($this->getVertices() as $station) {
+            /* @var \Upgle\Model\Station $station */
+            $stations[] = [
+                "id" => $station->getId(),
+                "name" => $station->getName(),
+                "line" => $station->getLine()
+            ];
+        }
+        return $stations;
+    }
+
+    /**
      * 환승에 대한 가중치를 최대로 설정합니다
      * 최소 환승시 호출합니다.
      */
