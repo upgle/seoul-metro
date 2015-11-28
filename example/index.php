@@ -22,28 +22,33 @@ $goalId = (isset($_GET["goal"]) && is_numeric($_GET["goal"])) ? $_GET["goal"] : 
 $searchTarget = (isset($_GET["target"])) ? $_GET["target"] : NULL;
 
 /**
- * Initilize SeoulMetro Graph
+ * Initialize SeoulMetro Graph
+ * SeoulMetro 클래스 초기화
  */
 $seoulMetro = new SeoulMetro();
 
 /**
  * Import Data From Excel
+ * 엑셀 파일로부터 노선 정보를 읽어들임
  */
 $importer = new ExcelImporter(EXCEL_PATH, $seoulMetro);
 $importer->import();
 
 /**
- * 최소 시간 or 최소 환승
+ * 최소 시간 or 최소 환승 설정
  */
 if($searchTarget == "minTransfer") {
+    //최소 환승의 경우 환승 가중치를 최대로 높임
     $seoulMetro->setTransferWeightHeavy();
 }
 
 /**
- * Benchmark Dijkstra Algorithm
+ * Dijkstra Algorithm
+ * 다익스트라 알고리즘으로 최단경로를 계산
+ * (+벤치마킹)
  */
 $bench = new \Ubench();
-$bench->start();
+$bench->start(); //벤치마킹 시작
 $algorithm = new Dijkstra($seoulMetro);
 $path = [];
 if($startId && $goalId) {
@@ -52,31 +57,27 @@ if($startId && $goalId) {
         $goalId
     );
 }
-$bench->end();
+$bench->end(); //벤치마킹 종료
 
 /**
  * Make Path Information
+ * 소요시간, 정차역, 환승 및 노선 색상 정보를 가공
  */
 $pathInfo = new Path($seoulMetro, $path);
 
 /**
  * Google Map Helper
+ * 구글 맵에 필요한 정보를 가공
  */
 $googleMap = new GoogleMap($path);
 $googleMapCenter = $googleMap->getCenter();
 
 /**
  * get Stations list
+ * TypeAhead 에서 사용하는 노선 정보
  */
-$stations = [];
-foreach($seoulMetro->getVertices() as $station) {
-    /* @var \Upgle\Model\Station $station */
-    $stations[] = [
-        "id" => $station->getId(),
-        "name" => $station->getName(),
-        "line" => $station->getLine()
-    ];
-}
+$stations = $seoulMetro->getStationsToArray();
+
 ?>
 <!DOCTYPE html>
 <html>
