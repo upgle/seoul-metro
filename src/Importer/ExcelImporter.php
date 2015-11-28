@@ -4,11 +4,12 @@ namespace Upgle\Importer;
 use Upgle\Model\Edge;
 use Upgle\Model\Graph;
 use Upgle\Model\Station;
+use Upgle\Model\SeoulMetro;
 
 class ExcelImporter
 {
     /**
-     * @var Graph
+     * @var SeoulMetro
      */
     protected $graph;
 
@@ -80,13 +81,15 @@ class ExcelImporter
 
         foreach($rowIterator as $row) {
 
-            $vertexId1 = NULL;
-            $vertexId2 = NULL;
+            $line = $vertexId1 = $vertexId2 = NULL;
             $minutes = 0;
             foreach($row->getCellIterator() as $cell) {
                 /* @var $cell \PHPExcel_Cell */
                 $column = $cell->getColumn();
                 switch($column) {
+                    case 'A' :
+                        $line = $cell->getValue();
+                        break;
                     case 'B' :
                         $vertexId1 = $cell->getValue();
                         break;
@@ -125,6 +128,11 @@ class ExcelImporter
             $vertex1->connect($vertex2);
             $vertex2->connect($vertex1);
 
+            if($line == "TRANSFER") {
+                $this->graph->setTransferPair($vertex1->getId(), $vertex2->getId());
+                $vertex1->setTransferStation(true);
+                $vertex2->setTransferStation(true);
+            }
             $this->graph->setEdge(new Edge($vertex1, $vertex2, $minutes));
             $this->graph->setEdge(new Edge($vertex2, $vertex1, $minutes));
             $this->graph->setVertex($vertex1);

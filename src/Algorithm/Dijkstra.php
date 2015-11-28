@@ -65,7 +65,7 @@ class Dijkstra implements ShortestPathInterface {
         }
         array_push($S, $target);
 
-        //STACK 자료구조를 사용하지 않아 반전 처리
+        //스택 자료구조를 사용하지 않아 Array Reverse 처리
         return array_reverse($S);
     }
 

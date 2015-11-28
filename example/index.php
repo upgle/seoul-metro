@@ -5,6 +5,7 @@ use Upgle\Importer\ExcelImporter;
 use Upgle\Algorithm\Dijkstra;
 use Upgle\Model\SeoulMetro;
 use Upgle\Support\GoogleMap;
+use Upgle\Support\Path;
 
 /**
  * Composer Autoload
@@ -44,6 +45,11 @@ if($startId && $goalId) {
     );
 }
 $bench->end();
+
+/**
+ * Make Path Information
+ */
+$pathInfo = new Path($seoulMetro, $path);
 
 /**
  * Google Map Helper
@@ -105,9 +111,9 @@ foreach($seoulMetro->getVertices() as $station) {
     <div class="subway-information">
         <div class="subway-information-summary">
             <ul>
-                <li>소요시간 <span class="data">19분</span></li>
-                <li>정차역 <span class="data">18개</span></li>
-                <li>환승 <span class="data">11개</span></li>
+                <li>소요시간 <span class="data"><?=$pathInfo->getMinutes()?>분</span></li>
+                <li>정차역 <span class="data"><?=$pathInfo->getStationCount()?>개</span></li>
+                <li>환승 <span class="data"><?=$pathInfo->getTransferCount()?>회</span></li>
             </ul>
         </div>
         <ul class="subway-route subway-information-route">
