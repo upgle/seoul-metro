@@ -82,11 +82,22 @@ class SeoulMetro extends Graph
     public function setTransferWeightHeavy() {
         foreach($this->transferPair as $transferA => $children) {
             foreach($children as $transferB => $val) {
-                
+
                 //같은 노선 환성의 경우 가중치를 높이지 않음
                 if($transferA[0] == '*' || $transferB[0] == '*') continue;
                 $this->getEdgeById($transferA, $transferB)->setWeight(500);
             }
+        }
+    }
+
+    /**
+     * 특정 환승역에 대한 가중치를 설정합니다.
+     * @param $stationId
+     */
+    public function setSpecificTransferWeight($stationId, $weight = 0) {
+        foreach($this->transferPair[$stationId] as $transferId => $val) {
+            $this->getEdgeById($stationId, $transferId)->setWeight($weight);
+            $this->getEdgeById($transferId, $stationId)->setWeight($weight);
         }
     }
 }

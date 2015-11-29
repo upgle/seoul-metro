@@ -48,17 +48,31 @@ if($searchTarget == "minTransfer") {
  * 다익스트라 알고리즘으로 최단경로를 계산
  * (+벤치마킹)
  */
-$bench = new \Ubench();
-$bench->start(); //벤치마킹 시작
-$algorithm = new Dijkstra($seoulMetro);
 $path = [];
+$bench = new \Ubench();
+
+//벤치마킹 시작
+$bench->start();
+
+$algorithm = new Dijkstra($seoulMetro);
 if($startId && $goalId) {
+    //시작 역이 환승역인 경우 연결된 환승역의 가중치를 0으로 세팅
+    if($seoulMetro->getVertexById($startId)->isTransferStation()) {
+        $seoulMetro->setSpecificTransferWeight($startId, 0);
+    }
+    //종료 역이 환승역인 경우 연결된 환승역의 가중치를 0으로 세팅
+    if($seoulMetro->getVertexById($goalId)->isTransferStation()) {
+        $seoulMetro->setSpecificTransferWeight($goalId, 0);
+    }
+    //최단 경로를 구함
     $path = $algorithm->getShortestPath(
         $startId,
         $goalId
     );
 }
-$bench->end(); //벤치마킹 종료
+
+//벤치마킹 종료
+$bench->end();
 
 /**
  * Make Path Information
