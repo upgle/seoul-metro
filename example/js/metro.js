@@ -24,39 +24,25 @@ $( document ).ready(function() {
         $("#form-search").submit();
     });
 
-    $('.start_typeahead').typeahead({
-            hint: true,
-            highlight: true,
-            minLength: 1
-        },
-        {
-            name: 'states',
-            displayKey: "name",
-            source: states,
-            templates: {
-                suggestion: function (data) {
-                    return '<div><strong>' + data.name + '</strong> - ' + data.line + '호선</div>';
-                }
+    var typeahead_option = {
+        hint: true,
+        highlight: true,
+        minLength: 1
+    };
+    var typeahead_data = {
+        name: 'states',
+        displayKey: "name",
+        source: states,
+        templates: {
+            suggestion: function (data) {
+                return '<div><strong>' + data.name + '</strong> - ' + data.line + '</div>';
             }
-        }).on('typeahead:selected', function (event, data) {
+        }
+    };
+    $('.start_typeahead').typeahead(typeahead_option, typeahead_data).on('typeahead:selected', function (event, data) {
             $('.start').val(data.id);
-        });
-
-    $('.goal_typeahead').typeahead({
-            hint: true,
-            highlight: true,
-            minLength: 1
-        },
-        {
-            name: 'states',
-            displayKey: "name",
-            source: states,
-            templates: {
-                suggestion: function (data) {
-                    return '<div><strong>' + data.name + '</strong> - ' + data.line + '호선</div>';
-                }
-            }
-        }).on('typeahead:selected', function (event, data) {
+    });
+    $('.goal_typeahead').typeahead(typeahead_option, typeahead_data).on('typeahead:selected', function (event, data) {
             $('.goal').val(data.id);
-        });
+    });
 });

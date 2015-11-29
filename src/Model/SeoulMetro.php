@@ -69,7 +69,7 @@ class SeoulMetro extends Graph
             $stations[] = [
                 "id" => $station->getId(),
                 "name" => $station->getName(),
-                "line" => $station->getLine()
+                "line" => Station::$LINE[$station->getLine()]
             ];
         }
         return $stations;

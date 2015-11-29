@@ -6,6 +6,7 @@ use Upgle\Algorithm\Dijkstra;
 use Upgle\Model\SeoulMetro;
 use Upgle\Support\GoogleMap;
 use Upgle\Support\Path;
+use Upgle\Model\Station;
 
 /**
  * Composer Autoload
@@ -130,7 +131,7 @@ $stations = $seoulMetro->getStationsToArray();
                     $isTransfer = $seoulMetro->isTransferPair($prevStation->getId(), $station->getId());
                 ?>
                 <li class="line line<?=$station->getLine()?> <?php if($isTransfer) : ?> transfer<?php endif; ?>">
-                    <span class="mark"></span><?=$station->getName()?> (<?=$station->getLine()?>호선)
+                    <span class="mark"></span><?=$station->getName()?> (<?=Station::$LINE[$station->getLine()]?>)
                 </li>
             <?php $prevStation = $station; ?>
             <?php endforeach; ?>
