@@ -77,7 +77,6 @@ $googleMapCenter = $googleMap->getCenter();
  * TypeAhead 에서 사용하는 노선 정보
  */
 $stations = $seoulMetro->getStationsToArray();
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -123,8 +122,17 @@ $stations = $seoulMetro->getStationsToArray();
             </ul>
         </div>
         <ul class="subway-route subway-information-route">
+            <?php $prevStation = null ?>
             <?php foreach ($path as $station) : ?>
-                <li class="line line<?=$station->getLine()?>"><span class="mark"></span><?=$station->getName()?> (<?=$station->getLine()?>호선)</li>
+
+                <?php
+                if($prevStation)
+                    $isTransfer = $seoulMetro->isTransferPair($prevStation->getId(), $station->getId());
+                ?>
+                <li class="line line<?=$station->getLine()?> <?php if($isTransfer) : ?> transfer<?php endif; ?>">
+                    <span class="mark"></span><?=$station->getName()?> (<?=$station->getLine()?>호선)
+                </li>
+            <?php $prevStation = $station; ?>
             <?php endforeach; ?>
         </ul>
         <?php endif; ?>

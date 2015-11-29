@@ -143,7 +143,6 @@ html, body {
     color:#777;
 }
 
-
 .subway-route .line1 + .line1,
 .subway-route .line2 + .line2,
 .subway-route .line3 + .line3,
@@ -185,9 +184,20 @@ html, body {
 .subway-route .lineA + .lineA:before {
     border-left-style : solid;
     top: -10px;
-    left:29px;
     height: 20px;
     content : "";
+}
+
+.subway-route .line + .line.transfer {
+    margin-top: 19px;
+}
+.subway-route .line + .line.transfer:before {
+    border-color: #ccc;
+    border-left-style: dotted;
+    top: -25px;
+    height: 38px;
+    content : "\e75f";
+    line-height: 29px;
 }
 
 .subway-route .line1 .mark {
