@@ -29,12 +29,21 @@ class ExcelImporter
     }
 
     /**
-     * @return array
+     * Import data from excel
      * @throws \PHPExcel_Exception
      */
-    protected function getStations() {
-        $stations = [];
-        $rowIterator = $this->objPHPExcel->getSheet(2)->getRowIterator(2);
+    public function import()
+    {
+        $this->importStations();
+        $this->importStationEdges();
+        $this->importTransferEdges();
+    }
+
+    /**
+     * @throws \PHPExcel_Exception
+     */
+    protected function importStations() {
+        $rowIterator = $this->objPHPExcel->getSheetByName("역사코드")->getRowIterator(2);
         foreach($rowIterator as $row) {
 
             $line = $name = $code = NULL;
@@ -45,98 +54,141 @@ class ExcelImporter
                 /* @var $cell \PHPExcel_Cell */
                 $column = $cell->getColumn();
                 switch ($column) {
-                    case 'B' : //코드
+                    //코드
+                    case 'B' :
                         $code = $cell->getValue();
                         break;
-                    case 'C' : //이름
+                    //역 이름
+                    case 'C' :
                         $name = $cell->getValue();
                         break;
-                    case 'D' : //라인
+                    //라인
+                    case 'D' :
                         $line = $cell->getValue();
                         break;
-                    case 'F' : //GPS X 위도
+                    //GPS X 위도
+                    case 'F' :
                         $latitude = $cell->getValue();
                         break;
-                    case 'G' : //GPS Y 경도
+                    //GPS Y 경도
+                    case 'G' :
                         $longitude = $cell->getValue();
                         break;
                 }
             }
             if(is_numeric($code)) {
-                $stations[$code] = [
-                    "name" => $name,
-                    "line" => $line,
-                    "latitude" => $latitude,
-                    "longitude" => $longitude
-                ];
+                $station = new Station($code);
+                $station->setName($name);
+                $station->setLine($line);
+                $station->setLatitude($latitude);
+                $station->setLongitude($longitude);
+                $this->graph->setVertex($station);
             }
         }
-        return $stations;
     }
 
-    public function import()
-    {
-        $stations = $this->getStations();
-        $rowIterator = $this->objPHPExcel->getSheet(0)->getRowIterator();
+    /**
+     * Import station edges
+     */
+    protected function importStationEdges() {
 
+        $rowIterator = $this->objPHPExcel->getSheetByName("소요시간")->getRowIterator(2);
+
+        $prevCode = null;
         foreach($rowIterator as $row) {
 
-            $line = $vertexId1 = $vertexId2 = NULL;
-            $minutes = 0;
-            foreach($row->getCellIterator() as $cell) {
-                /* @var $cell \PHPExcel_Cell */
-                $column = $cell->getColumn();
-                switch($column) {
-                    case 'A' :
-                        $line = $cell->getValue();
+            $km = null;
+            $code = null;
+            $minute = null;
+
+            /* @var $cell \PHPExcel_Cell */
+            foreach($row->getCellIterator('I','K') as $cell) {
+                switch($cell->getColumn()) {
+                    //역코드
+                    case 'I' :
+                        $code = $cell->getValue();
                         break;
-                    case 'B' :
-                        $vertexId1 = $cell->getValue();
-                        break;
-                    case 'C' :
-                        $vertexId2 = $cell->getValue();
-                        break;
-                    //거리(km)
-                    case 'D' :
-                        $km = $cell->getValue();
-                        break;
-                    //시간(분)
-                    case 'E' :
-                        $minutes = $cell->getValue();
+                    //시간
+                    case 'K' :
+                        $minute = $cell->getValue();
                         break;
                 }
             }
-
-            if(!is_numeric($vertexId1) || !is_numeric($vertexId2)) continue;
-
-            $vertex1 = $this->graph->getVertexById($vertexId1);
-            if($vertex1 == NULL){
-                $vertex1 = new Station($vertexId1);
-                $vertex1->setName($stations[$vertexId1]["name"]);
-                $vertex1->setLine($stations[$vertexId1]["line"]);
-                $vertex1->setLatitude($stations[$vertexId1]["latitude"]);
-                $vertex1->setLongitude($stations[$vertexId1]["longitude"]);
-            }
-            $vertex2 = $this->graph->getVertexById($vertexId2);
-            if($vertex2 == NULL){
-                $vertex2 = new Station($vertexId2);
-                $vertex2->setName($stations[$vertexId2]["name"]);
-                $vertex2->setLine($stations[$vertexId2]["line"]);
-                $vertex2->setLatitude($stations[$vertexId2]["latitude"]);
-                $vertex2->setLongitude($stations[$vertexId2]["longitude"]);
-            }
-            $vertex1->connect($vertex2);
-            $vertex2->connect($vertex1);
-
-            if($line == "TRANSFER") {
-                $this->graph->setTransferPair($vertex1->getId(), $vertex2->getId());
-                $vertex1->setTransferStation(true);
-                $vertex2->setTransferStation(true);
-            }
-            $this->graph->setEdge(new Edge($vertex1, $vertex2, $minutes));
-            $this->graph->setEdge(new Edge($vertex2, $vertex1, $minutes));
-            $this->graph->setVertex($vertex1);
-            $this->graph->setVertex($vertex2);
+            $this->connectStation($code, $prevCode, $minute);
+            $prevCode = $code;
         }
     }
+
+    /**
+     * Import transfer edges
+     */
+    protected function importTransferEdges() {
+
+        $rowIterator = $this->objPHPExcel->getSheetByName("환승역")->getRowIterator();
+        foreach($rowIterator as $row) {
+
+            $stationCodeA = null;
+            $stationCodeB = null;
+            $minute = 0;
+
+            /* @var $cell \PHPExcel_Cell */
+            foreach($row->getCellIterator('I','L') as $cell) {
+                switch($cell->getColumn()) {
+                    //역코드B
+                    case 'I' :
+                        $stationCodeA = $cell->getValue();
+                        break;
+                    //역코드B
+                    case 'J' :
+                        $stationCodeB = $cell->getValue();
+                        break;
+                    //시간
+                    case 'L' :
+                        $minute = $cell->getValue();
+                        break;
+                }
+            }
+            $this->connectStation($stationCodeA, $stationCodeB, $minute, false, true);
+        }
+    }
+
+    /**
+     * @param $stationCodeA
+     * @param $stationCodeB
+     * @param $minute
+     * @param bool|false $isOneWay
+     * @param bool|false $isTransfer
+     */
+    protected function connectStation($stationCodeA, $stationCodeB, $minute, $isOneWay = false, $isTransfer = false) {
+
+        //Validation Check (code + code)
+        if(preg_match('/^\d{8}$/', $stationCodeA.$stationCodeB)) {
+
+            /** @var Station $stationA */
+            $stationA = $this->graph->getVertexById($stationCodeA);
+
+            /** @var Station $stationB */
+            $stationB = $this->graph->getVertexById($stationCodeB);
+
+            //Vertex 연결
+            $stationA->connect($stationB);
+            if(!$isOneWay) {
+                $stationB->connect($stationA);
+            }
+
+            //환승역 연결
+            if($isTransfer) {
+                $this->graph->setTransferPair($stationA->getId(), $stationB->getId());
+                $stationA->setTransferStation(true);
+                $stationB->setTransferStation(true);
+            }
+
+            //Edge 연결
+            $this->graph->setEdge(new Edge($stationA, $stationB, $minute));
+            if(!$isOneWay) {
+                $this->graph->setEdge(new Edge($stationB, $stationA, $minute));
+            }
+        }
+    }
+
 }
