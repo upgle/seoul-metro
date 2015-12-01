@@ -16,12 +16,19 @@ class Dijkstra implements ShortestPathInterface {
     private $graph;
 
     /**
+     * @var bool
+     */
+    private $isSameWeight = false;
+
+    /**
      * Dijkstra Constructor
      * @param Graph $graph
+     * @param bool|false $isSameWeight
      */
-    public function __construct(Graph $graph)
+    public function __construct(Graph $graph, $isSameWeight = false)
     {
         $this->graph = $graph;
+        $this->isSameWeight = $isSameWeight;
     }
 
     /**
@@ -123,7 +130,7 @@ class Dijkstra implements ShortestPathInterface {
          */
         foreach($Q as $vertex) {
             /* @var $vertex Vertex */
-            $dist[$vertex->getId()] = 999999;
+            $dist[$vertex->getId()] = 99999999;
         }
         $dist[$startId] = 0;
 
@@ -143,7 +150,11 @@ class Dijkstra implements ShortestPathInterface {
             foreach($u->getConnectedVertices() as $v){
                 $edge = $this->graph->getEdgeById($u->getId(), $v->getId());
 
-                $alt = $dist[$u->getId()] + $edge->getWeight();
+                //모두 동일한 가중치를 부여할때
+                $weight = ($this->isSameWeight) ? 1 : $edge->getWeight();
+
+                $alt = $dist[$u->getId()] + $weight;
+
                 if($alt < $dist[$v->getId()]) {
                     $dist[$v->getId()] = $alt;
 

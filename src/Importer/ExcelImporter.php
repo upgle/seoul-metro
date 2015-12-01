@@ -77,7 +77,7 @@ class ExcelImporter
                         break;
                 }
             }
-            if(preg_match('/^[\d\*]{4,5}$/', $code)) {
+            if(preg_match('/^[\d\*\#]{4,5}$/', $code)) {
                 $station = new Station($code);
                 $station->setName($name);
                 $station->setLine($line);
@@ -168,7 +168,7 @@ class ExcelImporter
     protected function connectStation($stationCodeA, $stationCodeB, $minute, $isOneWay = false, $isTransfer = false) {
 
         //Validation Check (code + code)
-        if(preg_match('/^[\d\*]{8,10}$/', $stationCodeA.$stationCodeB)) {
+        if(preg_match('/^[\d\*\#]{8,10}$/', $stationCodeA.$stationCodeB)) {
 
             /** @var Station $stationA */
             $stationA = $this->graph->getVertexById($stationCodeA);

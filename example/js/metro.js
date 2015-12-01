@@ -19,6 +19,11 @@ $( document ).ready(function() {
         $("#form-search").submit();
     });
 
+    $('.minStation').click(function () {
+        $("input[name=target]").val("minStation");
+        $("#form-search").submit();
+    });
+
     $('.minTransfer').click(function () {
         $("input[name=target]").val("minTransfer");
         $("#form-search").submit();

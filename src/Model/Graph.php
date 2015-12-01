@@ -4,7 +4,7 @@ namespace Upgle\Model;
 class Graph
 {
     /**
-     * @var Edge[]
+     * @var array Edge[]
      */
     protected $edges = [];
 
