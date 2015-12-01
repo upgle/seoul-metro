@@ -13,6 +13,7 @@ use Upgle\Model\Station;
  */
 require_once(dirname(__FILE__). '/../vendor/autoload.php');
 define('EXCEL_PATH', dirname(__FILE__). '/metro.xlsx');
+define('CACHE_FILE', 'metro.cache');
 date_default_timezone_set('Europe/London');
 
 /**
@@ -22,18 +23,26 @@ $startId = (isset($_GET["start"]) && is_numeric($_GET["start"])) ? $_GET["start"
 $goalId = (isset($_GET["goal"]) && is_numeric($_GET["goal"])) ? $_GET["goal"] : NULL;
 $searchTarget = (isset($_GET["target"])) ? $_GET["target"] : NULL;
 
-/**
- * Initialize SeoulMetro Graph
- * SeoulMetro 클래스 초기화
- */
-$seoulMetro = new SeoulMetro();
 
-/**
- * Import Data From Excel
- * 엑셀 파일로부터 노선 정보를 읽어들임
- */
-$importer = new ExcelImporter(EXCEL_PATH, $seoulMetro);
-$importer->import();
+if(file_exists(CACHE_FILE)) {
+
+    $seoulMetro = unserialize(file_get_contents(CACHE_FILE));
+
+} else {
+    /**
+     * Initialize SeoulMetro Graph
+     * SeoulMetro 클래스 초기화
+     */
+    $seoulMetro = new SeoulMetro();
+
+    /**
+     * Import Data From Excel
+     * 엑셀 파일로부터 노선 정보를 읽어들임
+     */
+    $importer = new ExcelImporter(EXCEL_PATH, $seoulMetro);
+    $importer->import();
+    file_put_contents(CACHE_FILE, serialize($seoulMetro));
+}
 
 /**
  * 최소 정거장 or 최소 시간 or 최소 환승 설정
