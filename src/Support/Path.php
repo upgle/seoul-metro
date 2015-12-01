@@ -83,7 +83,7 @@ class Path
 
         for($i=1; $i< count($this->path); $i++) {
             if(!$this->graph->isTransferPair($prev->getId(), $this->path[$i]->getId())) {
-                $this->minutes += $this->graph->getEdge($prev, $this->path[$i])->getWeight();
+                $this->minutes += $this->graph->getEdge($prev, $this->path[$i])->getMinute();
                 $this->stationCount++;
             } else {
                 // 환승 평균 시간 6분으로 고정

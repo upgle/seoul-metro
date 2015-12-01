@@ -3,6 +3,7 @@ namespace Upgle\Importer;
 
 use Upgle\Model\Edge;
 use Upgle\Model\Graph;
+use Upgle\Model\Rail;
 use Upgle\Model\Station;
 use Upgle\Model\SeoulMetro;
 
@@ -100,9 +101,10 @@ class ExcelImporter
             $km = null;
             $code = null;
             $minute = null;
+            $isOneWay = false;
 
             /* @var $cell \PHPExcel_Cell */
-            foreach($row->getCellIterator('I','K') as $cell) {
+            foreach($row->getCellIterator('I','L') as $cell) {
                 switch($cell->getColumn()) {
                     //역코드
                     case 'I' :
@@ -112,9 +114,13 @@ class ExcelImporter
                     case 'K' :
                         $minute = $cell->getValue();
                         break;
+                    //단방향여부
+                    case 'L' :
+                        $isOneWay = ($cell->getValue() == 'o');
+                        break;
                 }
             }
-            $this->connectStation($code, $prevCode, $minute);
+            $this->connectStation($code, $prevCode, $minute, $isOneWay);
             $prevCode = $code;
         }
     }
@@ -171,9 +177,9 @@ class ExcelImporter
             $stationB = $this->graph->getVertexById($stationCodeB);
 
             //Vertex 연결
-            $stationA->connect($stationB);
+            $stationB->connect($stationA);
             if(!$isOneWay) {
-                $stationB->connect($stationA);
+                $stationA->connect($stationB);
             }
 
             //환승역 연결
@@ -184,9 +190,9 @@ class ExcelImporter
             }
 
             //Edge 연결
-            $this->graph->setEdge(new Edge($stationA, $stationB, $minute));
+            $this->graph->setEdge(new Rail($stationB, $stationA, $minute, $minute));
             if(!$isOneWay) {
-                $this->graph->setEdge(new Edge($stationB, $stationA, $minute));
+                $this->graph->setEdge(new Rail($stationA, $stationB, $minute, $minute));
             }
         }
     }
