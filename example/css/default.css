@@ -49,7 +49,7 @@ html, body {
     position: absolute;
     left: 0;
     top: 0;
-    width: 295px;
+    width: 300px;
     background: #fff;
     border-right: 1px solid #aaa;
     z-index: 90;
@@ -401,7 +401,7 @@ html, body {
     background: #fff;
     border: 1px solid #ddd;
     border-bottom: none;
-    width: 82px;
+    width: 70px;
     color:#333;
     text-align: center;
     opacity: 0.5;
