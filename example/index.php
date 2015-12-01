@@ -14,7 +14,8 @@ use Upgle\Model\Station;
 require_once(dirname(__FILE__). '/../vendor/autoload.php');
 define('EXCEL_PATH', dirname(__FILE__). '/metro.xlsx');
 define('CACHE_FILE', 'metro.cache');
-date_default_timezone_set('Europe/London');
+define('USE_CACHE', true);
+date_default_timezone_set('Asia/Seoul');
 
 /**
  * HTTP Request
@@ -23,12 +24,14 @@ $startId = (isset($_GET["start"]) && is_numeric($_GET["start"])) ? $_GET["start"
 $goalId = (isset($_GET["goal"]) && is_numeric($_GET["goal"])) ? $_GET["goal"] : NULL;
 $searchTarget = (isset($_GET["target"])) ? $_GET["target"] : NULL;
 
-
-if(file_exists(CACHE_FILE)) {
-
+/**
+ * Excel Parser 퍼포먼스 문제가 있어 Cache 처리
+ * 엑셀 파일을 수정하는 경우 `metro.cache` 파일을 삭제하면 됩니다
+ */
+if(USE_CACHE && file_exists(CACHE_FILE)) {
     $seoulMetro = unserialize(file_get_contents(CACHE_FILE));
-
 } else {
+
     /**
      * Initialize SeoulMetro Graph
      * SeoulMetro 클래스 초기화
@@ -138,8 +141,8 @@ $stations = $seoulMetro->getStationsToArray();
         <input type="hidden" name="target" value="" />
         <input type="hidden" name="goal" class="goal" value="<?=$goalId?>" />
         <input type="hidden" name="start" class="start" value="<?=$startId?>"/>
-        <input class="start_typeahead" type="text" placeholder="출발 역" value="<?=$seoulMetro->getStationNameById($startId)?>">
-        <input class="goal_typeahead" type="text" placeholder="도착 역" value="<?=$seoulMetro->getStationNameById($goalId)?>">
+        <input class="start_typeahead" type="text" placeholder="출발지를 입력하세요" value="<?=$seoulMetro->getStationNameById($startId)?>">
+        <input class="goal_typeahead" type="text" placeholder="도착지를 입력하세요" value="<?=$seoulMetro->getStationNameById($goalId)?>">
         <button type="submit" class="btn-search" value="빠른길 찾기"><i class="xi-magnifier"></i> 빠른길 찾기</button>
         <ul class="searching-option">
             <li class="minStation <?php if(!$searchTarget || $searchTarget=="minStation"):?> active<?php endif; ?>">최소 정거장</li>
@@ -170,6 +173,13 @@ $stations = $seoulMetro->getStationsToArray();
             <?php $prevStation = $station; ?>
             <?php endforeach; ?>
         </ul>
+        <?php else : ?>
+        <div class="subway-information-nodata">
+            <i class="subway-information-nodata-icon xi-pin-circle"></i>
+            <p class="subway-information-nodata-text">먼저 검색해주시기 바랍니다.</p>
+        </div>
+
+
         <?php endif; ?>
     </div>
 </div>

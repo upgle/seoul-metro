@@ -66,34 +66,50 @@ html, body {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-.subway-information .subway-information-summary {
+.subway-information-summary {
     margin: 0 20px 10px;
     padding: 13px 12px;
     border: 1px solid #EBEBEB;
     background: #fcfcfc;
     font-size: 12px;
 }
-.subway-information .subway-information-summary > ul {
+.subway-information-summary > ul {
     padding: 0;
     margin: 0;
     list-style: none;
 }
-.subway-information .subway-information-summary > ul li {
+.subway-information-summary > ul li {
     display: inline-block;
 }
-.subway-information .subway-information-summary > ul li .data {
+.subway-information-summary > ul li .data {
     font-weight: bold;
     color : #f00;
 }
-.subway-information .subway-information-summary > ul li + li {
+.subway-information-summary > ul li + li {
     margin-left: 10px;
 }
-.subway-information .subway-information-summary > ul li + li:before {
+.subway-information-summary > ul li + li:before {
     position: relative;
     left: -5px;
     content : '|';
     color:#ddd;
 }
+
+.subway-information-nodata {
+    text-align: center;
+    padding: 35px 0 0;
+    color: #ccc;
+}
+.subway-information-nodata-icon {
+    font-size  : 56px;
+    padding-bottom: 20px;
+    color: #ddd;
+}
+.subway-information-nodata-text {
+    margin: 0;
+    padding: 0;
+}
+
 
 .subway-route {
     margin: 0;
