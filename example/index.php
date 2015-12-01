@@ -161,7 +161,7 @@ $stations = $seoulMetro->getStationsToArray();
         </div>
         <ul class="subway-route subway-information-route">
             <?php $prevStation = null ?>
-            <?php foreach ($path as $station) : ?>
+            <?php foreach ($pathInfo->getPath() as $station) : ?>
 
                 <?php
                 if($prevStation)

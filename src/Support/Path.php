@@ -68,7 +68,25 @@ class Path
         $this->path = $path;
         $this->graph = $graph;
 
+        $this->removeStartGoalTransfer();
         $this->init();
+    }
+
+    /**
+     * 출발지와 도착지가 환승역이면 제거한다
+     */
+    private function removeStartGoalTransfer() {
+
+        if(count($this->path) < 2) return;
+        if($this->graph->isTransferPair($this->path[0]->getId(), $this->path[1]->getId())) {
+            array_shift($this->path);
+        }
+
+        $count = count($this->path);
+        if($count < 2) return;
+        if($this->graph->isTransferPair($this->path[$count-2]->getId(), $this->path[$count-1]->getId())) {
+            array_pop($this->path);
+        }
     }
 
     /**
@@ -76,12 +94,13 @@ class Path
      */
     private function init() {
 
-        if(count($this->path) == 0) return;
+        $count = count($this->path);
+        if($count == 0) return;
 
         $prev = $this->path[0];
         $this->setColorPath($prev);
 
-        for($i=1; $i< count($this->path); $i++) {
+        for($i=1; $i< $count; $i++) {
             if(!$this->graph->isTransferPair($prev->getId(), $this->path[$i]->getId())) {
                 $this->minutes += $this->graph->getEdge($prev, $this->path[$i])->getMinute();
                 $this->stationCount++;
@@ -133,6 +152,14 @@ class Path
     public function getTransferCount()
     {
         return $this->transferCount;
+    }
+
+    /**
+     * @return \Upgle\Model\Station[]
+     */
+    public function getPath()
+    {
+        return $this->path;
     }
 
 
