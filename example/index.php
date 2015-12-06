@@ -50,19 +50,14 @@ if(USE_CACHE && file_exists(CACHE_FILE)) {
 /**
  * 최소 정거장 or 최소 시간 or 최소 환승 설정
  */
-$isSameWeight = false;
 switch($searchTarget) {
     //최소 환승의 경우 환승 가중치를 최대로 높임
     case "minTransfer" :
         $seoulMetro->setTransferWeightHeavy();
         break;
-    //최소 시간의 경우 역사이 시간을 가중치로 처리
-    case "minTime" :
-        $isSameWeight = false;
-        break;
     case "minStation" :
-    default :
-        $isSameWeight = true;
+        $seoulMetro->setAllWeightSame(0);
+        break;
 }
 
 /**
@@ -76,7 +71,7 @@ $bench = new \Ubench();
 //벤치마킹 시작
 $bench->start();
 
-$algorithm = new Dijkstra($seoulMetro, $isSameWeight);
+$algorithm = new Dijkstra($seoulMetro);
 if($startId && $goalId) {
     //시작 역이 환승역인 경우 연결된 환승역의 가중치를 0으로 세팅
     if($seoulMetro->getVertexById($startId)->isTransferStation()) {

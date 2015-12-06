@@ -90,6 +90,15 @@ class SeoulMetro extends Graph
         }
     }
 
+    public function setAllWeightSame($weight = 0) {
+        /** @var Edge $edge */
+        foreach($this->edges as $edgeA) {
+            foreach($edgeA as $edge) {
+                $edge->setWeight($weight);
+            }
+        }
+    }
+
     /**
      * 특정 환승역에 대한 가중치를 설정합니다.
      * @param $stationId
