@@ -55,8 +55,11 @@ switch($searchTarget) {
     case "minTransfer" :
         $seoulMetro->setTransferWeightHeavy();
         break;
+    case "minTime" :
+        break;
     case "minStation" :
-        $seoulMetro->setAllWeightSame(0);
+    default :
+    $seoulMetro->setAllWeightSame(0);
         break;
 }
 
