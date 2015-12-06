@@ -111,7 +111,7 @@ class Path
                 $this->transferCount++;
             }
 
-            if($prev->getLine() !== $this->path[$i]->getLine()) {
+            if($prev->getLine() != $this->path[$i]->getLine()) {
                 $colorIndex++;
             }
             $this->setColorPath($colorIndex, $this->path[$i]);
@@ -123,7 +123,6 @@ class Path
      * @param Station $station
      */
     private function setColorPath($index, Station $station) {
-        $lineColor = Path::$COLOR[$station->getLine()];
         $this->colorPath[$index][] = $station;
     }
 
