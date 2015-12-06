@@ -204,7 +204,7 @@ $stations = $seoulMetro->getStationsToArray();
          */
         var subwayPlanCoordinates;
         var subwayPath;
-        <?php foreach ($pathInfo->getColorPath() as $color => $stations) : ?>
+        <?php foreach ($pathInfo->getColorPath() as $index => $stations) : ?>
         subwayPlanCoordinates = [
             <?php foreach ($stations as $station) : ?>
             {lat: <?=$station->getLatitude()?>, lng:  <?=$station->getLongitude()?>},
@@ -213,7 +213,7 @@ $stations = $seoulMetro->getStationsToArray();
         subwayPath = new google.maps.Polyline({
             path: subwayPlanCoordinates,
             geodesic: true,
-            strokeColor: "<?=$color?>",
+            strokeColor: "<?=Path::$COLOR[$station->getLine()]?>",
             strokeOpacity: 1.0,
             strokeWeight: 8
         });

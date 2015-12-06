@@ -97,8 +97,9 @@ class Path
         $count = count($this->path);
         if($count == 0) return;
 
+        $colorIndex = 0;
         $prev = $this->path[0];
-        $this->setColorPath($prev);
+        $this->setColorPath($colorIndex, $prev);
 
         for($i=1; $i< $count; $i++) {
             if(!$this->graph->isTransferPair($prev->getId(), $this->path[$i]->getId())) {
@@ -109,7 +110,11 @@ class Path
                 $this->minutes += 6;
                 $this->transferCount++;
             }
-            $this->setColorPath($this->path[$i]);
+
+            if($prev->getLine() !== $this->path[$i]->getLine()) {
+                $colorIndex++;
+            }
+            $this->setColorPath($colorIndex, $this->path[$i]);
             $prev = $this->path[$i];
         }
     }
@@ -117,9 +122,9 @@ class Path
     /**
      * @param Station $station
      */
-    private function setColorPath(Station $station) {
+    private function setColorPath($index, Station $station) {
         $lineColor = Path::$COLOR[$station->getLine()];
-        $this->colorPath[$lineColor][] = $station;
+        $this->colorPath[$index][] = $station;
     }
 
     /**
