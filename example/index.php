@@ -59,7 +59,7 @@ switch($searchTarget) {
         break;
     case "minStation" :
     default :
-    $seoulMetro->setAllWeightSame(0);
+    $seoulMetro->setAllWeightSame(1);
         break;
 }
 

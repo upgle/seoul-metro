@@ -90,7 +90,7 @@ class SeoulMetro extends Graph
         }
     }
 
-    public function setAllWeightSame($weight = 0) {
+    public function setAllWeightSame($weight = 1) {
         /** @var Edge $edge */
         foreach($this->edges as $edgeA) {
             foreach($edgeA as $edge) {
