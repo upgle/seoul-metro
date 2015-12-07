@@ -20,8 +20,8 @@ date_default_timezone_set('Asia/Seoul');
 /**
  * HTTP Request
  */
-$startId = (isset($_GET["start"]) && is_numeric($_GET["start"])) ? $_GET["start"] : NULL;
-$goalId = (isset($_GET["goal"]) && is_numeric($_GET["goal"])) ? $_GET["goal"] : NULL;
+$startId = isset($_GET["start"]) ? $_GET["start"] : NULL;
+$goalId = isset($_GET["goal"]) ? $_GET["goal"] : NULL;
 $searchTarget = (isset($_GET["target"])) ? $_GET["target"] : NULL;
 
 /**
